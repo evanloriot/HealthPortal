@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -18,6 +19,13 @@ namespace HealthPortal.Models
         }
 
         public virtual Identifiers Identifier { get; set; }
+
+        public string PhysicianID { get; set; }
+
+        public string DisplayName { get; set; }
+
+        [ForeignKey("PhysicianID")]
+        public virtual ApplicationUser PrimaryPhysician { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>

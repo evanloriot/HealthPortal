@@ -348,6 +348,7 @@
     <Content Include="Views\Manage\ChangeAddress.cshtml" />
     <Content Include="Views\Manage\ChangePhone.cshtml" />
     <Content Include="Views\Manage\ChangeEmergencyPhone.cshtml" />
+    <Content Include="Views\Manage\ChangeDisplayName.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

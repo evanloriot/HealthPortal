@@ -65,6 +65,7 @@ namespace HealthPortal.Controllers
                 : message == ManageMessageId.ChangeAddressSuccess ? "Your address has been changed."
                 : message == ManageMessageId.ChangePhoneSuccess ? "Your phone number has been changed."
                 : message == ManageMessageId.ChangeEmergencyPhoneSuccess ? "Your emergency phone number has been changed."
+                : message == ManageMessageId.ChangeDisplayNameSuccess ? "Your display name has been changed."
                 : "";
 
             var userId = User.Identity.GetUserId();
@@ -79,6 +80,7 @@ namespace HealthPortal.Controllers
                 DOB = user.Identifier.DOB,
                 Email = UserManager.GetEmail(userId),
                 EmergencyPhone = user.Identifier.EmergencyPhone,
+                DisplayName = user.DisplayName,
                 HasPassword = HasPassword(),
                 PhoneNumber = user.Identifier.Phone,
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
@@ -347,6 +349,44 @@ namespace HealthPortal.Controllers
         }
 
         //
+        //GET: /Manage/ChangeDisplayName
+        public ActionResult ChangeDisplayName()
+        {
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            ViewBag.DisplayName = user.DisplayName;
+            return View();
+        }
+
+        //
+        //POST: /Manage/ChangeDisplayName
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeDisplayName(ChangeDisplayNameViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            user.DisplayName = model.DisplayName;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeDisplayNameSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        //
         // GET: /Manage/ChangePassword
         public ActionResult ChangePassword()
         {
@@ -511,6 +551,7 @@ namespace HealthPortal.Controllers
             ChangeAddressSuccess,
             ChangePhoneSuccess,
             ChangeEmergencyPhoneSuccess,
+            ChangeDisplayNameSuccess,
             AddPhoneSuccess,
             ChangePasswordSuccess,
             SetTwoFactorSuccess,

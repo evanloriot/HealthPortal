@@ -13,6 +13,7 @@ namespace HealthPortal.Models
         public DateTime DOB { get; set; }
         public string Email { get; set; }
         public string EmergencyPhone { get; set; }
+        public string DisplayName { get; set; }
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
@@ -52,6 +53,13 @@ namespace HealthPortal.Models
         [StringLength(11, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
         [Display(Name = "Emergency Phone")]
         public string EmergencyPhone { get; set; }
+    }
+
+    public class ChangeDisplayNameViewModel
+    {
+        [StringLength(30, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 5)]
+        [Display(Name = "Display Name")]
+        public string DisplayName { get; set; }
     }
 
     public class SetPasswordViewModel

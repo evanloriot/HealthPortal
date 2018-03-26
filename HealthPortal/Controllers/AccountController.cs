@@ -172,7 +172,10 @@ namespace HealthPortal.Controllers
                             Phone = model.Phone,
                             EmergencyPhone = model.EmergencyPhone,
                             SSN = model.SSN
-                        }
+                        },
+                        PhysicianID = null,
+                        DisplayName = null,
+                        PrimaryPhysician = null
                     };
                     var userResult = await userManager.CreateAsync(user, model.Password);
                     var roleResult = await userManager.AddToRoleAsync(user.Id, "Patient");
