@@ -7,6 +7,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using HealthPortal.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace HealthPortal.Controllers
 {
@@ -61,13 +62,25 @@ namespace HealthPortal.Controllers
                 : message == ManageMessageId.Error ? "An error has occurred."
                 : message == ManageMessageId.AddPhoneSuccess ? "Your phone number was added."
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
+                : message == ManageMessageId.ChangeAddressSuccess ? "Your address has been changed."
+                : message == ManageMessageId.ChangePhoneSuccess ? "Your phone number has been changed."
+                : message == ManageMessageId.ChangeEmergencyPhoneSuccess ? "Your emergency phone number has been changed."
                 : "";
 
             var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
             var model = new IndexViewModel
             {
+                Name = user.Identifier.FullName,
+                Address = user.Identifier.Address,
+                DOB = user.Identifier.DOB,
+                Email = UserManager.GetEmail(userId),
+                EmergencyPhone = user.Identifier.EmergencyPhone,
                 HasPassword = HasPassword(),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(userId),
+                PhoneNumber = user.Identifier.Phone,
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(userId),
                 Logins = await UserManager.GetLoginsAsync(userId),
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
@@ -211,6 +224,126 @@ namespace HealthPortal.Controllers
                 await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
             }
             return RedirectToAction("Index", new { Message = ManageMessageId.RemovePhoneSuccess });
+        }
+
+        //
+        //GET: /Manage/ChangeAddress
+        public ActionResult ChangeAddress()
+        {
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            ViewBag.Address = user.Identifier.Address;
+            return View();
+        }
+
+        //
+        //POST: /Manage/ChangeAddress
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeAddress(ChangeAddressViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            Identifiers id = user.Identifier;
+            id.Address = model.Address;
+            user.Identifier = id;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeAddressSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        //
+        //GET: /Manage/ChangePhone
+        public ActionResult ChangePhone()
+        {
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            ViewBag.Phone = user.Identifier.Phone;
+            return View();
+        }
+
+        //
+        //POST: /Manage/ChangePhone
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePhone(ChangePhoneViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            Identifiers id = user.Identifier;
+            id.Phone = model.Phone;
+            user.Identifier = id;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePhoneSuccess });
+            }
+            AddErrors(result);
+            return View(model);
+        }
+
+        //
+        //GET: /Manage/ChangeEmergencyPhone
+        public ActionResult ChangeEmergencyPhone()
+        {
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            ViewBag.EmergencyPhone = user.Identifier.EmergencyPhone;
+            return View();
+        }
+
+        //
+        //POST: /Manage/ChangeEmergencyPhone
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangeEmergencyPhone(ChangeEmergencyPhoneViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var userId = User.Identity.GetUserId();
+            var context = new ApplicationDbContext();
+            var userStore = new UserStore<ApplicationUser>(context);
+            var userManager = new UserManager<ApplicationUser>(userStore);
+            var user = UserManager.FindById(userId);
+            Identifiers id = user.Identifier;
+            id.EmergencyPhone = model.EmergencyPhone;
+            user.Identifier = id;
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangeEmergencyPhoneSuccess });
+            }
+            AddErrors(result);
+            return View(model);
         }
 
         //
@@ -375,6 +508,9 @@ namespace HealthPortal.Controllers
 
         public enum ManageMessageId
         {
+            ChangeAddressSuccess,
+            ChangePhoneSuccess,
+            ChangeEmergencyPhoneSuccess,
             AddPhoneSuccess,
             ChangePasswordSuccess,
             SetTwoFactorSuccess,

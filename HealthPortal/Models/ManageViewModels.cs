@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -7,6 +8,11 @@ namespace HealthPortal.Models
 {
     public class IndexViewModel
     {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public DateTime DOB { get; set; }
+        public string Email { get; set; }
+        public string EmergencyPhone { get; set; }
         public bool HasPassword { get; set; }
         public IList<UserLoginInfo> Logins { get; set; }
         public string PhoneNumber { get; set; }
@@ -23,6 +29,29 @@ namespace HealthPortal.Models
     public class FactorViewModel
     {
         public string Purpose { get; set; }
+    }
+
+    public class ChangeAddressViewModel
+    {
+        [Required]
+        [StringLength(50, ErrorMessage = "The {0} must be no greater than {2} characters long.")]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+    }
+
+    public class ChangePhoneViewModel
+    {
+        [Required]
+        [StringLength(11, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+    }
+
+    public class ChangeEmergencyPhoneViewModel
+    {
+        [StringLength(11, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
+        [Display(Name = "Emergency Phone")]
+        public string EmergencyPhone { get; set; }
     }
 
     public class SetPasswordViewModel
