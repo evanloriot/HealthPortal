@@ -155,6 +155,8 @@ namespace HealthPortal.Controllers
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
 
                     await roleManager.CreateAsync(new IdentityRole { Name = "Patient" });
+                    await roleManager.CreateAsync(new IdentityRole { Name = "Admin" });
+                    await roleManager.CreateAsync(new IdentityRole { Name = "Doctor" });
 
                     var userStore = new UserStore<ApplicationUser>(context);
                     var userManager = new UserManager<ApplicationUser>(userStore);
