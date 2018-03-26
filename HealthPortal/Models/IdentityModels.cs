@@ -16,6 +16,8 @@ namespace HealthPortal.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual Identifiers Identifier { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -29,5 +31,7 @@ namespace HealthPortal.Models
         {
             return new ApplicationDbContext();
         }
+
+        public DbSet<Identifiers> Identifiers { get; set; }
     }
 }

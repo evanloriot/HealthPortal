@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace HealthPortal.Models
@@ -64,6 +65,38 @@ namespace HealthPortal.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [Display(Name = "Full Name")]
+        [StringLength(50, ErrorMessage = "The {0} must be at least {2} characters long and no more than {1} characters.", MinimumLength = 3)]
+        public string FullName { get; set; }
+
+        [Required]
+        [Display(Name = "Date of Birth")]
+        public DateTime DOB { get; set; }
+
+        [Required]
+        [Display(Name = "Gender")]
+        public string Gender { get; set; } 
+
+        [Required]
+        [StringLength(50, ErrorMessage = "The {0} must be no greater than {2} characters long.")]
+        [Display(Name = "Address")]
+        public string Address { get; set; }
+
+        [Required]
+        [StringLength(11, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
+        [Display(Name = "Phone")]
+        public string Phone { get; set; }
+
+        [StringLength(11, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 10)]
+        [Display(Name = "Emergency Phone")]
+        public string EmergencyPhone { get; set; }
+
+        [Required]
+        [StringLength(9, ErrorMessage = "The {0} must be {2} characters long.", MinimumLength = 9)]
+        [Display(Name = "SSN")]
+        public string SSN { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
