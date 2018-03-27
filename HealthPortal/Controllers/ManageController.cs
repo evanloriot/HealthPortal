@@ -69,9 +69,6 @@ namespace HealthPortal.Controllers
                 : "";
 
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             var model = new IndexViewModel
             {
@@ -233,9 +230,6 @@ namespace HealthPortal.Controllers
         public ActionResult ChangeAddress()
         {
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             ViewBag.Address = user.Identifier.Address;
             return View();
@@ -252,9 +246,6 @@ namespace HealthPortal.Controllers
                 return View(model);
             }
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             Identifiers id = user.Identifier;
             id.Address = model.Address;
@@ -273,9 +264,6 @@ namespace HealthPortal.Controllers
         public ActionResult ChangePhone()
         {
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             ViewBag.Phone = user.Identifier.Phone;
             return View();
@@ -292,9 +280,6 @@ namespace HealthPortal.Controllers
                 return View(model);
             }
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             Identifiers id = user.Identifier;
             id.Phone = model.Phone;
@@ -313,9 +298,6 @@ namespace HealthPortal.Controllers
         public ActionResult ChangeEmergencyPhone()
         {
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             ViewBag.EmergencyPhone = user.Identifier.EmergencyPhone;
             return View();
@@ -332,9 +314,6 @@ namespace HealthPortal.Controllers
                 return View(model);
             }
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             Identifiers id = user.Identifier;
             id.EmergencyPhone = model.EmergencyPhone;
@@ -353,9 +332,6 @@ namespace HealthPortal.Controllers
         public ActionResult ChangeDisplayName()
         {
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             ViewBag.DisplayName = user.DisplayName;
             return View();
@@ -372,9 +348,6 @@ namespace HealthPortal.Controllers
                 return View(model);
             }
             var userId = User.Identity.GetUserId();
-            var context = new ApplicationDbContext();
-            var userStore = new UserStore<ApplicationUser>(context);
-            var userManager = new UserManager<ApplicationUser>(userStore);
             var user = UserManager.FindById(userId);
             user.DisplayName = model.DisplayName;
             var result = await UserManager.UpdateAsync(user);

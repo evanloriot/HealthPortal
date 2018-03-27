@@ -1,0 +1,32 @@
+﻿@model PagedList.IPagedList<HealthPortal.Models.AdminIndexViewModel>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Manage Users";
+}
+
+@if (!User.IsInRole("Admin"))
+{
+    <h2>Error</h2>
+    <p>@ViewBag.Error</p>
+}
+else
+{
+    <h2>@ViewBag.Title</h2>
+
+    <p class="text-success">@ViewBag.StatusMessage</p>
+
+    <div>
+        @foreach (var item in Model)
+        {
+            <dl class="dl-horizontal">
+                <dt>@item.FullName</dt>
+                [
+                @Html.ActionLink("Manage Roles", "ManageRoles", "Admin", new { UserID = item.ID }, null)
+                ]
+            </dl>
+        }
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        @Html.PagedListPager(Model, Page => Url.Action("Index", new { Page }))
+    </div>
+}
