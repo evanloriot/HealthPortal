@@ -1,4 +1,5 @@
 ﻿using System;
+using PagedList;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -8,6 +9,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using HealthPortal.Models;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections.Generic;
 
 namespace HealthPortal.Controllers
 {
@@ -16,6 +18,7 @@ namespace HealthPortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private const int DefaultPageSize = 10;
 
         public ManageController()
         {
@@ -57,6 +60,7 @@ namespace HealthPortal.Controllers
         {
             ViewBag.StatusMessage =
                 message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                : message == ManageMessageId.ChangePhysicianSuccess ? "Your primary physician has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
                 : message == ManageMessageId.Error ? "An error has occurred."
@@ -70,11 +74,17 @@ namespace HealthPortal.Controllers
 
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
+
+            var physicianId = user.PhysicianID;
+            var physician = UserManager.FindById(physicianId);
+            string physicianName = physician == null ? null : "Dr. " + physician.Identifier.FullName;
+
             var model = new IndexViewModel
             {
                 Name = user.Identifier.FullName,
                 Address = user.Identifier.Address,
                 DOB = user.Identifier.DOB,
+                PrimaryPhysician = physicianName,
                 Email = UserManager.GetEmail(userId),
                 EmergencyPhone = user.Identifier.EmergencyPhone,
                 DisplayName = user.DisplayName,
@@ -85,6 +95,56 @@ namespace HealthPortal.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        //
+        //GET: /Manage/ChangePhysician
+        public ActionResult ChangePhysician(int? page)
+        {
+            var db = new ApplicationDbContext();
+            //get all physician names put into model and pass to view
+            //var physicians = from u in db.Users
+            //                 join r in db.Roles on u.Roles. equals r.Id
+            //                 join i in db.Identifiers on u.Id equals i.IdentifierID
+            //                 where r.Name == "Doctor"
+            //                 select i.FullName;
+
+            var role = (from r in db.Roles where r.Name == "Doctor" select r.Id).SingleOrDefault();
+            var users = db.Users
+                        .Join(db.Identifiers,
+                        u => u.Id,
+                        i => i.IdentifierID,
+                        (u, i) => new { User = u, Identifier = i })
+                        .Where(UI => UI.User.Roles.Any(r => r.RoleId == role));
+
+            IList<Identifiers> physicians = new List<Identifiers>();
+            foreach (var item in users)
+            {
+                physicians.Add(item.Identifier);
+            }
+
+            int currentPageIndex = page ?? 1;
+            return View(physicians.ToPagedList(currentPageIndex, DefaultPageSize));
+        }
+
+        //
+        //POST: /Manage/ChangePhysician
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ChangePhysician()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            user.PhysicianID = Request.Form["Physician"];
+
+            var result = await UserManager.UpdateAsync(user);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("Index", new { Message = ManageMessageId.ChangePhysicianSuccess });
+            }
+            AddErrors(result);
+            return View("Index");
         }
 
         //
@@ -521,6 +581,7 @@ namespace HealthPortal.Controllers
 
         public enum ManageMessageId
         {
+            ChangePhysicianSuccess,
             ChangeAddressSuccess,
             ChangePhoneSuccess,
             ChangeEmergencyPhoneSuccess,

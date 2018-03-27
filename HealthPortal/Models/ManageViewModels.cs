@@ -11,6 +11,7 @@ namespace HealthPortal.Models
         public string Name { get; set; }
         public string Address { get; set; }
         public DateTime DOB { get; set; }
+        public string PrimaryPhysician { get; set; }
         public string Email { get; set; }
         public string EmergencyPhone { get; set; }
         public string DisplayName { get; set; }

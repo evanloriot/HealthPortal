@@ -66,8 +66,12 @@ namespace HealthPortal.Controllers
 
         // GET: Admin
         [Authorize(Roles = "Admin")]
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, AdminMessageId? message)
         {
+            ViewBag.StatusMessage =
+                message == AdminMessageId.ManageRoleSuccess ? "You have successfully changed user role."
+                : "";
+
             bool result = User.IsInRole("Admin");
             if (!result)
             {
@@ -155,7 +159,8 @@ namespace HealthPortal.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            return View("Index", this.users.ToPagedList(1, DefaultPageSize));
+
+            return RedirectToAction("Index", new { UserID = this.users.ToPagedList(1, DefaultPageSize), Message = AdminMessageId.ManageRoleSuccess });
         }
 
         private void AddErrors(IdentityResult result)
@@ -164,6 +169,11 @@ namespace HealthPortal.Controllers
             {
                 ModelState.AddModelError("", error);
             }
+        }
+
+        public enum AdminMessageId
+        {
+            ManageRoleSuccess
         }
     }
 }

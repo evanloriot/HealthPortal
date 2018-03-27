@@ -21,6 +21,22 @@
         </dd>
         <dt>Date of Birth: </dt>
         <dd>@Model.DOB.ToShortDateString()</dd>
+        <dt>Primary Physician</dt>
+        <dd>
+            @Model.PrimaryPhysician
+            @if(Model.PrimaryPhysician == null)
+            {
+                @(new HtmlString("["))
+                @Html.ActionLink("Set your primary physician","ChangePhysician");
+                @(new HtmlString("]"))
+            }
+            else
+            {
+                @(new HtmlString("["))
+                @Html.ActionLink("Change your primary physician", "ChangePhysician");
+                @(new HtmlString("]"))
+            }
+        </dd>
         <dt>Email: </dt>
         <dd>@Model.Email</dd>
         <dt>Phone: </dt>

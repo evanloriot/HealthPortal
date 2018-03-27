@@ -33,7 +33,7 @@ else
                         {
                             <input type="checkbox" name="@item.Key" value="@item.Value" checked /> @item.Key<br />
                         }
-                        else if(!item.Key.Equals("UserID"))
+                        else if (!item.Key.Equals("UserID"))
                         {
                             <input type="checkbox" name="@item.Key" value="@item.Value" /> @item.Key<br />
                         }
@@ -49,6 +49,8 @@ else
         }
     </div>
 }
+@Html.ActionLink("Back", "Index")
+
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }

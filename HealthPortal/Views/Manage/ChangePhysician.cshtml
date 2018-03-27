@@ -1,0 +1,37 @@
+﻿@model PagedList.IPagedList<HealthPortal.Models.Identifiers>
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Change Physician";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<h4>Change Physician Form</h4>
+<hr />
+@Html.ValidationSummary("", new { @class = "text-danger" })
+<div class="form-group">
+    @Html.Label("Physicians:", new { @class = "col-md-1 control-label" })<br /><br />
+    @foreach (var item in Model)
+    {
+        using (Html.BeginForm("ChangePhysician", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="col-md-4" style="border-top: 1px solid #adadad; border-left: 1px solid #adadad; border-bottom: 1px solid #adadad">
+                <p style="margin-left: 20px">
+                    @(new HtmlString("Dr. "))
+                    @item.FullName
+                </p>
+            </div>
+            <input type="hidden" name="Physician" value="@item.IdentifierID" />
+            <input type="submit" class="btn btn-default" value="Select" title="Select this physician." />
+        }
+    }
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    @Html.PagedListPager(Model, Page => Url.Action("ChangePhysician", new { Page }))
+</div>
+@Html.ActionLink("Back", "Index")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
