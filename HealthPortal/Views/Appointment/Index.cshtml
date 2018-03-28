@@ -1,0 +1,31 @@
+﻿@model HealthPortal.Models.AppointmentIndexViewModel
+
+@{
+    ViewBag.Title = "Manage Appointments.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Next Appointment:</h4>
+<hr />
+@if (Model.Appointment == null)
+{
+    <p>No upcoming appointments!</p>
+}
+else
+{
+    <p>
+        @Model.Appointment.TimeDate.ToLongDateString()
+        @Model.Appointment.TimeDate.ToLongTimeString()
+    </p>
+    <ul>
+        <li>Physician: Dr. @Model.Appointment.Physician.Identifier.FullName</li>
+        <li>Purpose: @Model.Appointment.Reason</li>
+    </ul>
+    <hr />
+}
+@Html.ActionLink("Schedule a new appointment", "ScheduleAppointment")<br />
+@Html.ActionLink("View all appointments", "ViewAppointments")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

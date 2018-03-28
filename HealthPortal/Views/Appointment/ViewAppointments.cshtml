@@ -1,0 +1,39 @@
+﻿@model HealthPortal.Models.ViewAppointmentsViewModel
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "View Appointments.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>All Appointments:</h4>
+<hr />
+@if (Model.Appointments != null)
+{
+    <div>
+        @foreach (var appointment in Model.Appointments)
+        {
+            <p>
+                @appointment.TimeDate.ToLongDateString()
+                @appointment.TimeDate.ToLongTimeString()
+            </p>
+            <ul>
+                <li>Physician: Dr. @appointment.Physician.Identifier.FullName</li>
+                <li>Purpose: @appointment.Reason</li>
+            </ul>
+            <hr />
+        }
+        Page @(Model.Appointments.PageCount < Model.Appointments.PageNumber ? 0 : Model.Appointments.PageNumber) of @Model.Appointments.PageCount
+        @Html.PagedListPager(Model.Appointments, Page => Url.Action("ViewAppointments", new { Page }))
+    </div>
+
+}
+else
+{
+    <p>No upcoming appointments!</p>
+}
+@Html.ActionLink("Back", "Index")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

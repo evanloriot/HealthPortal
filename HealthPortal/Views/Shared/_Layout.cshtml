@@ -26,6 +26,10 @@
                         <li>@Html.ActionLink("Profile", "Index", "Manage")</li>
                     }
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Appointments", "Index", "Appointment")</li>
+                    }
                     @if (User.IsInRole("Admin"))
                     {
                         <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
