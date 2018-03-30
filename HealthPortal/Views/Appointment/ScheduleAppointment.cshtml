@@ -65,6 +65,10 @@
         var object = @(Html.Raw(Json.Encode(Model.TimeDates)));
 
         $('#dateselector').on('dp.change', function (e) {
+            if (getFormattedDateYearFirst(e.date._d) < getFormattedDateYearFirst(new Date())) {
+                alert("Please choose a date either today or in the future.");
+                e.preventDefault();
+            }
             $("#date").html(e.date._d.toDateString());
             var data = ["8:00:00 AM", "9:00:00 AM", "10:00:00 AM", "11:00:00 AM", "12:00:00 PM", "1:00:00 PM", "2:00:00 PM", "3:00:00 PM", "4:00:00 PM", "5:00:00 PM"];
             for (var i = 0; i < data.length; i++) {
@@ -77,11 +81,22 @@
             }
         });
 
-        function check(e) {
+        function check(event) {
+            if (reverseDate($('#dateselector').data().date) < getFormattedDateYearFirst(new Date())) {
+                alert("Please choose a date either today or in the future.");
+                event.preventDefault();
+            }
             var names = $('[name="reas"]');
             for (var i = 0; i < names.length; i++) {
                 names[i].setAttribute("value", document.getElementById("Reason").value);
             }
+        }
+
+        function reverseDate(date) {
+            var year = date.substring(6, 10);
+            var month = date.substring(0, 2);
+            var day = date.substring(3, 5);
+            return year + '/' + month + '/' + day;
         }
 
         function getFormattedDate(date) {
@@ -93,6 +108,18 @@
             day = day.length > 1 ? day : '0' + day;
 
             return month + '/' + day + '/' + year;
+        }
+
+        function getFormattedDateYearFirst(date) {
+            var year = date.getFullYear();
+
+            var month = (1 + date.getMonth()).toString();
+            month = month.length > 1 ? month : '0' + month;
+
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+
+            return year + '/' + month + '/' + day;
         }
     </script>
 }
