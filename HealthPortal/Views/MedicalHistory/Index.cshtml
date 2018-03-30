@@ -8,6 +8,7 @@
     }
 
     <h2>@ViewBag.Title</h2>
+    <p class="text-success">@ViewBag.StatusMessage</p>
     <h4>Patients:</h4>
     <hr />
     if (Model.Patients.Count != 0)
@@ -17,15 +18,23 @@
             {
                 <li>
                     @item.Identifier.FullName
-                <ul>
-                    @foreach (var detail in Model.PatientHistories[item.Id])
-                    {
-                        <li>@detail.Details</li>
-                    }
-                    <li>@Html.ActionLink("Add Medical History", "AddMedicalHistory", new { ID = item.Id })</li>
-                </ul>
-            </li>
-        }
+                    <ul>
+                        @foreach (var detail in Model.PatientHistories[item.Id])
+                        {
+                            <li>
+                                @detail.Details
+                                [
+                                @Html.ActionLink("Edit record", "EditMedicalHistory", new { ID = detail.MedicalHistoryID })
+                                ]
+                                [
+                                @Html.ActionLink("Delete record", "DeleteMedicalHistory", new { ID = detail.MedicalHistoryID } )
+                                ]
+                            </li>
+                        }
+                        <li>@Html.ActionLink("Add record", "AddMedicalHistory", new { ID = item.Id })</li>
+                    </ul>
+                </li>
+            }
             Page @(Model.Patients.PageCount < Model.Patients.PageNumber ? 0 : Model.Patients.PageNumber) of @Model.Patients.PageCount
             @Html.PagedListPager(Model.Patients, Page => Url.Action("Index", new { Page }))
         </ul>

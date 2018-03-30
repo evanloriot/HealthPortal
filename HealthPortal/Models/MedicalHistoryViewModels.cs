@@ -18,4 +18,10 @@ namespace HealthPortal.Models
         public string ID { get; set; }
         public string Details { get; set; }
     }
+
+    public class EditMedicalHistoryViewModel
+    {
+        public int ID { get; set; }
+        public string Details { get; set; }
+    }
 }

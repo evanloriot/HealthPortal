@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -54,8 +55,13 @@ namespace HealthPortal.Controllers
         }
 
         // GET: MedicalHistory
-        public ActionResult Index(int? page)
+        public ActionResult Index(int? page, MedicalHistoryMessageId? message)
         {
+            ViewBag.StatusMessage = message == MedicalHistoryMessageId.AddMedicalHistorySuccess ? "Medical record added."
+                : message == MedicalHistoryMessageId.EditMedicalHistorySuccess ? "Medical record changed."
+                : message == MedicalHistoryMessageId.DeleteMedicalHistorySuccess ? "Medical record deleted."
+                : "";
+
             var userId = User.Identity.GetUserId();
             var db = new ApplicationDbContext();
             var MedicalHistory = db.MedicalHistory.Where(u => u.UserID == userId).ToList();
@@ -109,7 +115,48 @@ namespace HealthPortal.Controllers
             var db = new ApplicationDbContext();
             db.MedicalHistory.Add(detail);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { Message = MedicalHistoryMessageId.AddMedicalHistorySuccess } );
+        }
+
+        // GET: MedicalHistory/EditMedicalHistory
+        public ActionResult EditMedicalHistory(int ID)
+        {
+            var db = new ApplicationDbContext();
+            var detail = db.MedicalHistory.Where(u => u.MedicalHistoryID == ID).FirstOrDefault();
+            var model = new EditMedicalHistoryViewModel
+            {
+                ID = ID,
+                Details = detail.Details
+            };
+            return View(model);
+        }
+
+        //POST: MedicalHistory/EditMedicalHistory
+        [HttpPost]
+        public ActionResult EditMedicalHistory(EditMedicalHistoryViewModel model)
+        {
+            var db = new ApplicationDbContext();
+            var record = db.MedicalHistory.Where(u => u.MedicalHistoryID == model.ID).FirstOrDefault();
+            record.Details = model.Details;
+            db.Entry(record).State = EntityState.Modified;
+            db.SaveChanges();
+            return RedirectToAction("Index", new { Message = MedicalHistoryMessageId.EditMedicalHistorySuccess });
+        }
+
+        public ActionResult DeleteMedicalHistory(int ID)
+        {
+            var db = new ApplicationDbContext();
+            var record = db.MedicalHistory.Where(u => u.MedicalHistoryID == ID).FirstOrDefault();
+            db.MedicalHistory.Remove(record);
+            db.SaveChanges();
+            return RedirectToAction("Index", new { Message = MedicalHistoryMessageId.DeleteMedicalHistorySuccess });
+        }
+
+        public enum MedicalHistoryMessageId
+        {
+            AddMedicalHistorySuccess,
+            EditMedicalHistorySuccess,
+            DeleteMedicalHistorySuccess
         }
     }
 }
