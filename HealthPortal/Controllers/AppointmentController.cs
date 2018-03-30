@@ -60,6 +60,7 @@ namespace HealthPortal.Controllers
             ViewBag.StatusMessage =
                 message == AppointmentMessageId.ScheduleAppointmentSuccess ? "Your appointment has been scheduled."
                 : message == AppointmentMessageId.DeleteAppointmentSuccess ? "Your appointment has been canceled."
+                : message == AppointmentMessageId.AddResponseSuccess ? "Your response has been recorded."
                 : "";
 
             var db = new ApplicationDbContext();
@@ -243,7 +244,7 @@ namespace HealthPortal.Controllers
                 db.SaveChanges();
             }
             
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { Message = AppointmentMessageId.AddResponseSuccess });
         }
 
         public ActionResult DeleteAppointment()
@@ -259,6 +260,7 @@ namespace HealthPortal.Controllers
         public enum AppointmentMessageId
         {
             ScheduleAppointmentSuccess,
+            AddResponseSuccess,
             DeleteAppointmentSuccess
         }
 

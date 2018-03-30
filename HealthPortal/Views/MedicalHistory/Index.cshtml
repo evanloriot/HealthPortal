@@ -1,1 +1,56 @@
-﻿
+﻿@model HealthPortal.Models.MedicalHistoryIndexViewModel
+@using PagedList.Mvc
+
+@if (User.IsInRole("Doctor"))
+{
+    {
+        ViewBag.Title = "Manage Patient Medical History.";
+    }
+
+    <h2>@ViewBag.Title</h2>
+    <h4>Patients:</h4>
+    <hr />
+    if (Model.Patients.Count != 0)
+    {
+        <ul>
+            @foreach (var item in Model.Patients)
+            {
+                <li>
+                    @item.Identifier.FullName
+                <ul>
+                    @foreach (var detail in Model.PatientHistories[item.Id])
+                    {
+                        <li>@detail.Details</li>
+                    }
+                    <li>@Html.ActionLink("Add Medical History", "AddMedicalHistory", new { ID = item.Id })</li>
+                </ul>
+            </li>
+        }
+            Page @(Model.Patients.PageCount < Model.Patients.PageNumber ? 0 : Model.Patients.PageNumber) of @Model.Patients.PageCount
+            @Html.PagedListPager(Model.Patients, Page => Url.Action("Index", new { Page }))
+        </ul>
+    }
+}
+else
+{
+    {
+        ViewBag.Title = "Medical History.";
+    }
+
+    <h2>@ViewBag.Title</h2>
+    <h4>History details:</h4>
+    <hr />
+    if (Model.History.Count != 0)
+    {
+        <ul>
+            @foreach (var item in Model.History)
+            {
+                <li>@item.Details</li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p>No Medical History on file!</p>
+    }
+}

@@ -29,6 +29,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Appointments", "Index", "Appointment")</li>
+                        <li>@Html.ActionLink("Medical History", "Index", "MedicalHistory")</li>
                     }
                     @if (User.IsInRole("Admin"))
                     {

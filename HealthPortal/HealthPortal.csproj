@@ -211,6 +211,7 @@
     <Compile Include="Models\Identifiers.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MedicalHistory.cs" />
+    <Compile Include="Models\MedicalHistoryViewModels.cs" />
     <Compile Include="Models\ResponseViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -381,6 +382,7 @@
     <Content Include="Views\Appointment\AddResponse.cshtml" />
     <Content Include="Views\Manage\ViewPhysician.cshtml" />
     <Content Include="Views\MedicalHistory\Index.cshtml" />
+    <Content Include="Views\MedicalHistory\AddMedicalHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
