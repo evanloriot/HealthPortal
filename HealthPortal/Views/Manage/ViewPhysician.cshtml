@@ -1,0 +1,35 @@
+﻿@model HealthPortal.Models.ApplicationUser
+
+@{ 
+    ViewBag.Title = "Physician Information.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Contact:</h4>
+<ul>
+    <li>Physician Name: Dr. @Model.Identifier.FullName</li>
+    <li>Email Address: @Model.Email</li>
+    <li>
+        Phone Number: 
+        @if (Model.Identifier.Phone.Length == 11)
+            {
+                @(new HtmlString("+"))
+                @Model.Identifier.Phone.Substring(0,1)
+                @(new HtmlString(" ("))
+                @Model.Identifier.Phone.Substring(1, 3)
+                @(new HtmlString(") "))
+                @Model.Identifier.Phone.Substring(4, 3)
+                @(new HtmlString("-"))
+                @Model.Identifier.Phone.Substring(7, 4)
+            }
+            else
+            {
+                @(new HtmlString("("))
+                @Model.Identifier.Phone.Substring(0, 3)
+                @(new HtmlString(") "))
+                @Model.Identifier.Phone.Substring(3, 3)
+                @(new HtmlString("-"))
+                @Model.Identifier.Phone.Substring(6, 4)
+            }
+    </li>
+</ul>

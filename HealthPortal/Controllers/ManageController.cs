@@ -99,24 +99,28 @@ namespace HealthPortal.Controllers
         }
 
         //
+        // GET: /Manage/ViewPhysician
+        public ActionResult ViewPhysician()
+        {
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+            var physician = user.PrimaryPhysician;
+            return View(physician);
+        }
+
+        //
         //GET: /Manage/ChangePhysician
         public ActionResult ChangePhysician(int? page)
         {
             var db = new ApplicationDbContext();
-            //get all physician names put into model and pass to view
-            //var physicians = from u in db.Users
-            //                 join r in db.Roles on u.Roles. equals r.Id
-            //                 join i in db.Identifiers on u.Id equals i.IdentifierID
-            //                 where r.Name == "Doctor"
-            //                 select i.FullName;
-
+            var userId = User.Identity.GetUserId();
             var role = (from r in db.Roles where r.Name == "Doctor" select r.Id).SingleOrDefault();
             var users = db.Users
                         .Join(db.Identifiers,
                         u => u.Id,
                         i => i.IdentifierID,
                         (u, i) => new { User = u, Identifier = i })
-                        .Where(UI => UI.User.Roles.Any(r => r.RoleId == role) && UI.User.Id != User.Identity.GetUserId());
+                        .Where(UI => UI.User.Roles.Any(r => r.RoleId == role) && UI.User.Id != userId);
 
             IList<Identifiers> physicians = new List<Identifiers>();
             foreach (var item in users)

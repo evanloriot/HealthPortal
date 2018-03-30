@@ -34,6 +34,8 @@
             {
                 @(new HtmlString("["))
                 @Html.ActionLink("Change your primary physician", "ChangePhysician");
+                @(new HtmlString("] ["))
+                @Html.ActionLink("View physician information", "ViewPhysician")
                 @(new HtmlString("]"))
             }
         </dd>
