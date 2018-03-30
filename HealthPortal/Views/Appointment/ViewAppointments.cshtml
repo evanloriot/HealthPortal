@@ -10,31 +10,45 @@
 <hr />
 @if (Model.Appointments != null)
 {
-    <div>
-        @foreach (var appointment in Model.Appointments)
-        {
-            <p>
-                @appointment.TimeDate.ToLongDateString()
-                @appointment.TimeDate.ToLongTimeString()
-            </p>
-            <ul>
+<div>
+    @foreach (var appointment in Model.Appointments)
+    {
+        <p>
+            @appointment.TimeDate.ToLongDateString()
+            @appointment.TimeDate.ToLongTimeString()
+        </p>
+        <ul>
+            @if (User.IsInRole("Doctor"))
+            {
+                <li>Patient: @appointment.Patient.Identifier.FullName</li>
+            }
+            else
+            {
                 <li>Physician: Dr. @appointment.Physician.Identifier.FullName</li>
-                <li>Purpose: @appointment.Reason</li>
-            </ul>
-            
-            if(appointment.TimeDate.Date > DateTime.Today)
+            }
+            <li>Purpose: @appointment.Reason</li>
+        </ul>
+
+        if (appointment.TimeDate.Date > DateTime.Today)
+        {
+            if (User.IsInRole("Doctor"))
+            {
+                @Html.ActionLink("View pre-checkup questionnaire", "AddResponse", new { ID = appointment.AppointmentID })<br /><br />
+            }
+            else
             {
                 @Html.ActionLink("Submit/View pre-checkup questionnaire", "AddResponse", new { ID = appointment.AppointmentID })<br /><br />
-                <form action="@Url.Action("DeleteAppointment")" method="post">
-                    <input type="hidden" name="ID" value="@appointment.AppointmentID" />
-                    <input type="submit" value="Cancel appointment" />
-                </form>
             }
-            <hr />
+            <form action="@Url.Action("DeleteAppointment")" method="post">
+                <input type="hidden" name="ID" value="@appointment.AppointmentID" />
+                <input type="submit" value="Cancel appointment" />
+            </form>
         }
-        Page @(Model.Appointments.PageCount < Model.Appointments.PageNumber ? 0 : Model.Appointments.PageNumber) of @Model.Appointments.PageCount
-        @Html.PagedListPager(Model.Appointments, Page => Url.Action("ViewAppointments", new { Page }))
-    </div>
+        <hr />
+    }
+    Page @(Model.Appointments.PageCount < Model.Appointments.PageNumber ? 0 : Model.Appointments.PageNumber) of @Model.Appointments.PageCount
+    @Html.PagedListPager(Model.Appointments, Page => Url.Action("ViewAppointments", new { Page }))
+</div>
 
 }
 else

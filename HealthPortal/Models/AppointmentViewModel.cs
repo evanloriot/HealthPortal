@@ -9,6 +9,7 @@ namespace HealthPortal.Models
 {
     public class AppointmentIndexViewModel
     {
+        public virtual Appointments PatientAppointment { get; set; }
         public virtual Appointments Appointment { get; set; }
     }
 

@@ -6,27 +6,52 @@
 
 <h2>@ViewBag.Title</h2>
 <p class="text-success">@ViewBag.StatusMessage</p>
-<h4>Next Appointment:</h4>
-<hr />
-@if (Model.Appointment == null)
+@if (User.IsInRole("Doctor"))
 {
-    <p>No upcoming appointments!</p>
+    <h4>Next Patient Appointment:</h4>
+    <hr />
+    if (Model.PatientAppointment != null)
+    {
+        <p>
+            @Model.PatientAppointment.TimeDate.ToLongDateString()
+            @Model.PatientAppointment.TimeDate.ToLongTimeString()
+        </p>
+        <ul>
+            <li>Physician: Dr. @Model.Appointment.Patient.Identifier.FullName</li>
+            <li>Purpose: @Model.Appointment.Reason</li>
+            <li>@Html.ActionLink("View pre-checkup questionnaire", "AddResponse", new { ID = Model.Appointment.AppointmentID })</li>
+        </ul>
+        @Html.ActionLink("View all patient appointments", "ViewAppointments")
+    }
+    else
+    {
+        <p>No upcoming patient appointments!</p>
+    }
 }
 else
 {
-    <p>
-        @Model.Appointment.TimeDate.ToLongDateString()
-        @Model.Appointment.TimeDate.ToLongTimeString()
-    </p>
-    <ul>
-        <li>Physician: Dr. @Model.Appointment.Physician.Identifier.FullName</li>
-        <li>Purpose: @Model.Appointment.Reason</li>
-        <li>@Html.ActionLink("Submit/View pre-checkup questionnaire", "AddResponse", new { ID = Model.Appointment.AppointmentID })</li>
-    </ul>
+    <h4>Next Personal Appointment:</h4>
     <hr />
+    if (Model.Appointment == null)
+    {
+        <p>No upcoming personal appointments!</p>
+    }
+    else
+    {
+        <p>
+            @Model.Appointment.TimeDate.ToLongDateString()
+            @Model.Appointment.TimeDate.ToLongTimeString()
+        </p>
+        <ul>
+            <li>Physician: Dr. @Model.Appointment.Physician.Identifier.FullName</li>
+            <li>Purpose: @Model.Appointment.Reason</li>
+            <li>@Html.ActionLink("Submit/View pre-checkup questionnaire", "AddResponse", new { ID = Model.Appointment.AppointmentID })</li>
+        </ul>
+        <hr />
+    }
+    @Html.ActionLink("Schedule a new appointment with primary physician", "ScheduleAppointment", "Appointment", new { Date = DateTime.Now }, null)<br />
+    @Html.ActionLink("View all appointments", "ViewAppointments")
 }
-@Html.ActionLink("Schedule a new appointment", "ScheduleAppointment", "Appointment", new { Date = DateTime.Now }, null )<br />
-@Html.ActionLink("View all appointments", "ViewAppointments")
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

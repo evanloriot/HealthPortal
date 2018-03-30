@@ -67,9 +67,16 @@ namespace HealthPortal.Controllers
             var apts = db.Appointments.Where(u => u.PatientID == userId && DateTime.Compare(u.TimeDate, DateTime.Today) >= 0).OrderBy(u => u.TimeDate).ToList();
             Appointments = apts;
 
+            Appointments apt = null;
+            if (User.IsInRole("Doctor"))
+            {
+                apt = db.Appointments.Where(u => u.PhysicianID == userId && DateTime.Compare(u.TimeDate, DateTime.Today) >= 0).OrderBy(u => u.TimeDate).FirstOrDefault();
+            }
+
             var model = new AppointmentIndexViewModel
             {
-                Appointment = Appointments.FirstOrDefault()
+                Appointment = Appointments.FirstOrDefault(),
+                PatientAppointment = apt
             };
 
             return View(model);
@@ -139,8 +146,14 @@ namespace HealthPortal.Controllers
         {
             var db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
-            var apts = db.Appointments.Where(u => u.PatientID == userId).OrderBy(u => u.TimeDate).ToList();
-            Appointments = apts;
+            if (User.IsInRole("Doctor"))
+            {
+                Appointments = db.Appointments.Where(u => u.PhysicianID == userId).OrderBy(u => u.TimeDate).ToList();
+            }
+            else
+            {
+                Appointments = db.Appointments.Where(u => u.PatientID == userId).OrderBy(u => u.TimeDate).ToList();
+            }
 
             int currentPageIndex = page ?? 1;
             var model = new ViewAppointmentsViewModel

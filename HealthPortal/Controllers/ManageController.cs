@@ -116,7 +116,7 @@ namespace HealthPortal.Controllers
                         u => u.Id,
                         i => i.IdentifierID,
                         (u, i) => new { User = u, Identifier = i })
-                        .Where(UI => UI.User.Roles.Any(r => r.RoleId == role));
+                        .Where(UI => UI.User.Roles.Any(r => r.RoleId == role) && UI.User.Id != User.Identity.GetUserId());
 
             IList<Identifiers> physicians = new List<Identifiers>();
             foreach (var item in users)

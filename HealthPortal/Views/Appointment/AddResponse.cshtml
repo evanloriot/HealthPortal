@@ -134,11 +134,14 @@
             No<br />
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Submit response" class="btn btn-default" />
+    if (!User.IsInRole("Doctor"))
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit response" class="btn btn-default" />
+            </div>
         </div>
-    </div>
+    }
 }
 @Html.ActionLink("Return to appointment home", "Index")
 
