@@ -24,6 +24,7 @@
             
             if(appointment.TimeDate.Date > DateTime.Today)
             {
+                @Html.ActionLink("Submit/View pre-checkup questionnaire", "AddResponse", new { ID = appointment.AppointmentID })<br /><br />
                 <form action="@Url.Action("DeleteAppointment")" method="post">
                     <input type="hidden" name="ID" value="@appointment.AppointmentID" />
                     <input type="submit" value="Cancel appointment" />

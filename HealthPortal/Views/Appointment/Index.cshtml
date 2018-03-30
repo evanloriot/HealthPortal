@@ -21,6 +21,7 @@ else
     <ul>
         <li>Physician: Dr. @Model.Appointment.Physician.Identifier.FullName</li>
         <li>Purpose: @Model.Appointment.Reason</li>
+        <li>@Html.ActionLink("Submit/View pre-checkup questionnaire", "AddResponse", new { ID = Model.Appointment.AppointmentID })</li>
     </ul>
     <hr />
 }

@@ -1,0 +1,147 @@
+﻿@model HealthPortal.Models.AddResponseViewModel
+
+@{
+    ViewBag.Title = "Submit Checkup Response.";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm("AddResponse", "Appointment", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Submit checkup response:</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <p>@Model.Appointment.TimeDate.ToLongDateString()</p>
+    <ul>
+        <li>Physician: @Model.PhysicianName</li>
+        <li>Purpose: @Model.Appointment.Reason</li>
+    </ul>
+    <input type="hidden" name="AppointmentID" value="@Model.AppointmentID" />
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q1A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q1A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q1A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q2A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q2A, 'N')
+            N/A<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'P')
+            Pain<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'S')
+            Shortness of breath<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'W')
+            Difficulty walking<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'E')
+            Problems in excratory function<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'D')
+            Dermatological issue<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'L')
+            Hearing or vision loss<br />
+            @Html.RadioButtonFor(m => Model.Q2A, 'V')
+            Dizziness or vertigo<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q3A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q3A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q3A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q4A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q4A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q4A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q5A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q5A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q5A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q6A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q6A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q6A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q7A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q7A, '1')
+            1<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '2')
+            2<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '3')
+            3<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '4')
+            4<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '5')
+            5<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '6')
+            6<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '7')
+            7<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '8')
+            8<br />
+            @Html.RadioButtonFor(m => Model.Q7A, '9')
+            9<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q8A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q8A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q8A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q9A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q9A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q9A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Q10A, new { @class = "col-md-3 control-label" })
+        <div class="col-md-10">
+            @Html.RadioButtonFor(m => Model.Q10A, 'Y')
+            Yes<br />
+            @Html.RadioButtonFor(m => Model.Q10A, 'N')
+            No<br />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit response" class="btn btn-default" />
+        </div>
+    </div>
+}
+@Html.ActionLink("Return to appointment home", "Index")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

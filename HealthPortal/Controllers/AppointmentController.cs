@@ -69,7 +69,7 @@ namespace HealthPortal.Controllers
 
             var model = new AppointmentIndexViewModel
             {
-                Appointment = Appointments.First()
+                Appointment = Appointments.FirstOrDefault()
             };
 
             return View(model);
@@ -145,6 +145,88 @@ namespace HealthPortal.Controllers
             };
 
             return View(model);
+        }
+        
+        // GET: Appointment/AddResponse
+        public ActionResult AddResponse(int ID = -1)
+        {
+            if(ID == -1)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var db = new ApplicationDbContext();
+            var r = db.CheckUpResponse.Where(u => u.AppointmentID == ID).FirstOrDefault();
+            var apt = db.Appointments.Where(u => u.AppointmentID == ID).FirstOrDefault();
+
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            var physicianId = user.PhysicianID;
+            var physician = UserManager.FindById(physicianId);
+            string physicianName = physician == null ? null : "Dr. " + physician.Identifier.FullName;
+
+            AddResponseViewModel model;
+            if(r != null)
+            {
+                model = new AddResponseViewModel
+                {
+                    AppointmentID = ID,
+                    Appointment = apt,
+                    PhysicianName = physicianName,
+                    Q1A = r.Q1A,
+                    Q2A = r.Q2A,
+                    Q3A = r.Q3A,
+                    Q4A = r.Q4A,
+                    Q5A = r.Q5A,
+                    Q6A = r.Q6A,
+                    Q7A = r.Q7A,
+                    Q8A = r.Q8A,
+                    Q9A = r.Q9A,
+                    Q10A = r.Q10A
+                };
+            }
+            else
+            {
+                model = new AddResponseViewModel
+                {
+                    AppointmentID = ID,
+                    Appointment = apt,
+                    PhysicianName = physicianName,
+                };
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddResponse(AddResponseViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            CheckUpResponse response = new CheckUpResponse
+            {
+                AppointmentID = model.AppointmentID,
+                Q1A = model.Q1A,
+                Q2A = model.Q2A,
+                Q3A = model.Q3A,
+                Q4A = model.Q4A,
+                Q5A = model.Q5A,
+                Q6A = model.Q6A,
+                Q7A = model.Q7A,
+                Q8A = model.Q8A,
+                Q9A = model.Q9A,
+                Q10A = model.Q10A
+            };
+            using(var db = new ApplicationDbContext())
+            {
+                db.CheckUpResponse.Add(response);
+                db.SaveChanges();
+            }
+            
+            return RedirectToAction("Index");
         }
 
         public ActionResult DeleteAppointment()
