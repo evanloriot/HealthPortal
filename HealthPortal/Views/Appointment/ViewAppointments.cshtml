@@ -21,6 +21,14 @@
                 <li>Physician: Dr. @appointment.Physician.Identifier.FullName</li>
                 <li>Purpose: @appointment.Reason</li>
             </ul>
+            
+            if(appointment.TimeDate.Date > DateTime.Today)
+            {
+                <form action="@Url.Action("DeleteAppointment")" method="post">
+                    <input type="hidden" name="ID" value="@appointment.AppointmentID" />
+                    <input type="submit" value="Cancel appointment" />
+                </form>
+            }
             <hr />
         }
         Page @(Model.Appointments.PageCount < Model.Appointments.PageNumber ? 0 : Model.Appointments.PageNumber) of @Model.Appointments.PageCount
