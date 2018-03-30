@@ -43,5 +43,6 @@ namespace HealthPortal.Models
         public DbSet<Identifiers> Identifiers { get; set; }
         public DbSet<Appointments> Appointments { get; set; }
         public DbSet<CheckUpResponse> CheckUpResponse { get; set; }
+        public DbSet<MedicalHistory> MedicalHistory { get; set; }
     }
 }
