@@ -44,5 +44,16 @@ namespace HealthPortal.Models
         public DbSet<Appointments> Appointments { get; set; }
         public DbSet<CheckUpResponse> CheckUpResponse { get; set; }
         public DbSet<MedicalHistory> MedicalHistory { get; set; }
+        public DbSet<PrescriptionType> PrescriptionTypes { get; set; }
+        public DbSet<Prescriptions> Prescriptions { get; set; }
+        public DbSet<PrescriptionsMap> PrescriptionMap { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<PrescriptionsMap>()
+                .HasKey(pm => new { pm.UserID, pm.PrescriptionID });
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

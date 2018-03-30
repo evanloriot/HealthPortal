@@ -199,6 +199,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MedicalHistoryController.cs" />
+    <Compile Include="Controllers\PrescriptionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -212,6 +213,9 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MedicalHistory.cs" />
     <Compile Include="Models\MedicalHistoryViewModels.cs" />
+    <Compile Include="Models\Prescriptions.cs" />
+    <Compile Include="Models\PrescriptionsMap.cs" />
+    <Compile Include="Models\PrescriptionType.cs" />
     <Compile Include="Models\ResponseViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -384,6 +388,7 @@
     <Content Include="Views\MedicalHistory\Index.cshtml" />
     <Content Include="Views\MedicalHistory\AddMedicalHistory.cshtml" />
     <Content Include="Views\MedicalHistory\EditMedicalHistory.cshtml" />
+    <Content Include="Views\Prescription\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
