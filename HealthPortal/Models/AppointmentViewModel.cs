@@ -15,6 +15,8 @@ namespace HealthPortal.Models
     public class ScheduleAppointmentViewModel
     {
         public virtual IList<Appointments> PhysicianAppointments { get; set; }
+        public DateTime Date { get; set; }
+        public Dictionary<string, bool> TimeDates { get; set; }
     }
 
     public class ViewAppointmentsViewModel

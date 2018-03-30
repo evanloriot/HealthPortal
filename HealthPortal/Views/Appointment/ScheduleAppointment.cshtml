@@ -11,20 +11,88 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-8">
-                <div id="datetimepicker12"></div>
+                <div id="dateselector"></div>
             </div>
         </div>
     </div>
 </div>
+@Html.Label("Reason: ")
+@Html.TextBox("Reason")<br /><br />
+<div id="date">@Model.Date.ToLongDateString()</div>
+<ul>
+    <li>
+        8:00 AM: <span id="0"></span>
+    </li>
+    <li>
+        9:00 AM: <span id="1"></span>
+    </li>
+    <li>
+        10:00 AM: <span id="2"></span>
+    </li>
+    <li>
+        11:00 AM: <span id="3"></span>
+    </li>
+    <li>
+        12:00 PM: <span id="4"></span>
+    </li>
+    <li>
+        1:00 PM: <span id="5"></span>
+    </li>
+    <li>
+        2:00 PM: <span id="6"></span>
+    </li>
+    <li>
+        3:00 PM: <span id="7"></span>
+    </li>
+    <li>
+        4:00 PM: <span id="8"></span>
+    </li>
+    <li>
+        5:00 PM: <span id="9"></span>
+    </li>
+</ul>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
     <script type="text/javascript">
         $(function () {
-            $('#datetimepicker12').datetimepicker({
+            $('#dateselector').datetimepicker({
                 inline: true,
-                format: 'MM/DD/YYYY'
+                format: "MM/DD/YYYY"
             });
         });
+
+        var object = @(Html.Raw(Json.Encode(Model.TimeDates)));
+
+        $('#dateselector').on('dp.change', function (e) {
+            $("#date").html(e.date._d.toDateString());
+            var data = ["8:00:00 AM", "9:00:00 AM", "10:00:00 AM", "11:00:00 AM", "12:00:00 PM", "1:00:00 PM", "2:00:00 PM", "3:00:00 PM", "4:00:00 PM", "5:00:00 PM"];
+            for (var i = 0; i < data.length; i++) {
+                if (object[getFormattedDate(e.date._d) + " " + data[i]]) {
+                    $("#" + i).html("No appointment available.");
+                }
+                else {
+                    $("#" + i).html("<form action=\"@Url.Action("ScheduleAppointment")\" method=\"POST\"><input type=\"hidden\" name=\"reas\" value=\"\" /><input type=\"hidden\" name=\"value\" value=\"" + getFormattedDate(e.date._d) + " " + data[i] + "\" /><input type=\"submit\" value=\"Schedule Appointment\" onclick=\"check(event)\" /></form>");
+                }
+            }
+        });
+
+        function check(e) {
+            var names = $('[name="reas"]');
+            for (var i = 0; i < names.length; i++) {
+                names[i].setAttribute("value", document.getElementById("Reason").value);
+            }
+        }
+
+        function getFormattedDate(date) {
+            var year = date.getFullYear();
+
+            var month = (1 + date.getMonth()).toString();
+
+            var day = date.getDate().toString();
+            day = day.length > 1 ? day : '0' + day;
+
+            return month + '/' + day + '/' + year;
+        }
     </script>
 }

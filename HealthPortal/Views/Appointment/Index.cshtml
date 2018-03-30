@@ -5,6 +5,7 @@
 }
 
 <h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
 <h4>Next Appointment:</h4>
 <hr />
 @if (Model.Appointment == null)
@@ -23,7 +24,7 @@ else
     </ul>
     <hr />
 }
-@Html.ActionLink("Schedule a new appointment", "ScheduleAppointment")<br />
+@Html.ActionLink("Schedule a new appointment", "ScheduleAppointment", "Appointment", new { Date = DateTime.Now }, null )<br />
 @Html.ActionLink("View all appointments", "ViewAppointments")
 
 @section Scripts {

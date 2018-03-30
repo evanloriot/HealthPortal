@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -54,11 +55,15 @@ namespace HealthPortal.Controllers
         }
 
         // GET: Appointment
-        public ActionResult Index()
+        public ActionResult Index(AppointmentMessageId? message)
         {
+            ViewBag.StatusMessage =
+                message == AppointmentMessageId.ScheduleAppointmentSuccess ? "Your appointment has been scheduled."
+                : "";
+
             var db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
-            var apts = db.Appointments.Where(u => u.PatientID == userId).OrderBy(u => u.TimeDate).ToList();
+            var apts = db.Appointments.Where(u => u.PatientID == userId && DateTime.Compare(u.TimeDate, DateTime.Today) >= 0).OrderBy(u => u.TimeDate).ToList();
             Appointments = apts;
 
             var model = new AppointmentIndexViewModel
@@ -72,16 +77,56 @@ namespace HealthPortal.Controllers
         // GET: Appointment/ScheduleAppointment
         public ActionResult ScheduleAppointment()
         {
+            DateTime Date = DateTime.Now;
+
             var db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
-            var apts = db.Appointments.Where(u => u.PatientID == userId).OrderBy(u => u.TimeDate).ToList();
+            var user = UserManager.FindById(userId);
+
+            var physicianId = user.PhysicianID;
+
+            var apts = db.Appointments.Where(u => u.PhysicianID == physicianId).OrderBy(u => u.TimeDate).ToList();
+
+            Dictionary<string, bool> TimeDates = new Dictionary<string, bool>();
+            foreach(var item in apts)
+            {
+                TimeDates[item.TimeDate.ToString()] = true;
+            }
 
             var model = new ScheduleAppointmentViewModel
             {
-                PhysicianAppointments = apts
+                PhysicianAppointments = apts,
+                Date = Date,
+                TimeDates = TimeDates
             };
 
             return View(model);
+        }
+
+        // POST: Appointment/ScheduleAppointment 
+        [HttpPost]
+        public ActionResult ScheduleAppointment(ScheduleAppointmentViewModel model)
+        {
+            string reason = Request.Form["reas"];
+            string date = Request.Form["value"];
+            DateTime TimeDate = Convert.ToDateTime(date);
+
+            var db = new ApplicationDbContext();
+            var userId = User.Identity.GetUserId();
+            var user = UserManager.FindById(userId);
+
+            var physicianId = user.PhysicianID;
+
+            db.Appointments.Add(new Appointments
+            {
+                PatientID = userId,
+                PhysicianID = physicianId,
+                Reason = reason,
+                TimeDate = TimeDate
+            });
+            db.SaveChanges();
+
+            return RedirectToAction("Index", new { Message = AppointmentMessageId.ScheduleAppointmentSuccess } );
         }
 
         // GET: Appointment/ViewAppointments
@@ -99,6 +144,11 @@ namespace HealthPortal.Controllers
             };
 
             return View(model);
+        }
+
+        public enum AppointmentMessageId
+        {
+            ScheduleAppointmentSuccess
         }
 
     }
