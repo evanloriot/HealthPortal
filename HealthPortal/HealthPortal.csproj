@@ -196,6 +196,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\DiagnosisController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MedicalHistoryController.cs" />
@@ -208,6 +209,8 @@
     <Compile Include="Models\Appointment.cs" />
     <Compile Include="Models\AppointmentViewModel.cs" />
     <Compile Include="Models\CheckUpResponse.cs" />
+    <Compile Include="Models\Diagnosis.cs" />
+    <Compile Include="Models\DiagnosisMap.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Identifiers.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -389,6 +392,7 @@
     <Content Include="Views\MedicalHistory\AddMedicalHistory.cshtml" />
     <Content Include="Views\MedicalHistory\EditMedicalHistory.cshtml" />
     <Content Include="Views\Prescription\Index.cshtml" />
+    <Content Include="Views\Diagnosis\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

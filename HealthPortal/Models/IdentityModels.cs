@@ -47,11 +47,15 @@ namespace HealthPortal.Models
         public DbSet<PrescriptionType> PrescriptionTypes { get; set; }
         public DbSet<Prescriptions> Prescriptions { get; set; }
         public DbSet<PrescriptionsMap> PrescriptionMap { get; set; }
+        public DbSet<Diagnosis> Diagnoses { get; set; }
+        public DbSet<DiagnosisMap> DiagnosisMap { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PrescriptionsMap>()
                 .HasKey(pm => new { pm.UserID, pm.PrescriptionID });
+            modelBuilder.Entity<DiagnosisMap>()
+                .HasKey(dm => new { dm.UserID, dm.DiagnosisID });
 
             base.OnModelCreating(modelBuilder);
         }

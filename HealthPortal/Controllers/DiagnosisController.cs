@@ -8,16 +8,16 @@ using System.Web.Mvc;
 namespace HealthPortal.Controllers
 {
     [Authorize]
-    public class PrescriptionController : Controller
+    public class DiagnosisController : Controller
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
 
-        public PrescriptionController()
+        public DiagnosisController()
         {
         }
 
-        public PrescriptionController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        public DiagnosisController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
@@ -47,7 +47,7 @@ namespace HealthPortal.Controllers
             }
         }
 
-        // GET: Prescription
+        // GET: Diagnosis
         public ActionResult Index()
         {
             return View();
