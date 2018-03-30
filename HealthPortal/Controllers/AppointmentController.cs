@@ -85,6 +85,10 @@ namespace HealthPortal.Controllers
             var user = UserManager.FindById(userId);
 
             var physicianId = user.PhysicianID;
+            if(physicianId == null)
+            {
+                return RedirectToAction("Index", "Manage", new { Message = ManageController.ManageMessageId.RequirePhysician });
+            }
 
             var apts = db.Appointments.Where(u => u.PhysicianID == physicianId).OrderBy(u => u.TimeDate).ToList();
 

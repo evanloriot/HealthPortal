@@ -59,7 +59,8 @@ namespace HealthPortal.Controllers
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
-                message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
+                message == ManageMessageId.RequirePhysician ? "You must set a primary physician before scheduling appointments."
+                : message == ManageMessageId.ChangePasswordSuccess ? "Your password has been changed."
                 : message == ManageMessageId.ChangePhysicianSuccess ? "Your primary physician has been changed."
                 : message == ManageMessageId.SetPasswordSuccess ? "Your password has been set."
                 : message == ManageMessageId.SetTwoFactorSuccess ? "Your two-factor authentication provider has been set."
@@ -581,6 +582,7 @@ namespace HealthPortal.Controllers
 
         public enum ManageMessageId
         {
+            RequirePhysician,
             ChangePhysicianSuccess,
             ChangeAddressSuccess,
             ChangePhoneSuccess,
