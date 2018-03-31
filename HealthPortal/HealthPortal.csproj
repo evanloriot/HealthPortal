@@ -197,6 +197,7 @@
     <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AppointmentController.cs" />
     <Compile Include="Controllers\DiagnosisController.cs" />
+    <Compile Include="Controllers\ForumController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MedicalHistoryController.cs" />
@@ -211,15 +212,19 @@
     <Compile Include="Models\CheckUpResponse.cs" />
     <Compile Include="Models\Diagnosis.cs" />
     <Compile Include="Models\DiagnosisMap.cs" />
+    <Compile Include="Models\ForumViewModels.cs" />
+    <Compile Include="Models\Group.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Identifiers.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\MedicalHistory.cs" />
     <Compile Include="Models\MedicalHistoryViewModels.cs" />
+    <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Prescriptions.cs" />
     <Compile Include="Models\PrescriptionsMap.cs" />
     <Compile Include="Models\PrescriptionType.cs" />
     <Compile Include="Models\ResponseViewModels.cs" />
+    <Compile Include="Models\Thread.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -393,6 +398,13 @@
     <Content Include="Views\MedicalHistory\EditMedicalHistory.cshtml" />
     <Content Include="Views\Prescription\Index.cshtml" />
     <Content Include="Views\Diagnosis\Index.cshtml" />
+    <Content Include="Views\Forum\Index.cshtml" />
+    <Content Include="Views\Forum\ManageGroups.cshtml" />
+    <Content Include="Views\Forum\AddGroup.cshtml" />
+    <Content Include="Views\Forum\ViewGroup.cshtml" />
+    <Content Include="Views\Forum\AddThread.cshtml" />
+    <Content Include="Views\Forum\ViewThread.cshtml" />
+    <Content Include="Views\Forum\AddPost.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

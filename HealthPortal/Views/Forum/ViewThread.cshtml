@@ -1,0 +1,42 @@
+﻿@model HealthPortal.Models.ViewThreadViewModel
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = Model.Thread.Title;
+}
+
+<h2>@ViewBag.Title</h2>
+<p>@Model.Thread.Message</p>
+<h4>Posts:</h4>
+<hr />
+@if (Model.Posts.Count != 0)
+{
+    <div>
+        <div>
+            @foreach (var item in Model.Posts)
+            {
+                if (item.User.DisplayName != null)
+                {
+                    <p style="color: grey">@item.User.DisplayName:</p>
+                }
+                else
+                {
+                    <p style="color: grey">@item.User.Identifier.FullName.Split(' ')[0]:</p>
+                }
+                <p style="margin-left:5%">@item.Message</p>
+                <hr />
+            }
+            @Html.ActionLink("Post response", "AddPost", new { ID = Model.Thread.ThreadID })<br /><br />
+        </div>
+        <hr />
+        Page @(Model.Posts.PageCount < Model.Posts.PageNumber ? 0 : Model.Posts.PageNumber) of @Model.Posts.PageCount
+        @Html.PagedListPager(Model.Posts, Page => Url.Action("ViewThread", new { Page }))
+    </div>
+}
+else
+{
+    <p>No responses yet. Post a response!</p>
+    @Html.ActionLink("Post response", "AddPost", new { ID = Model.Thread.ThreadID })<br /><br />
+}
+
+@Html.ActionLink("Back", "ViewGroup", new { ID = Model.Thread.GroupID })

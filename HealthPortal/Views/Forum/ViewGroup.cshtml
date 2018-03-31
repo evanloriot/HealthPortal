@@ -1,0 +1,31 @@
+﻿@model HealthPortal.Models.ViewGroupViewModel
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = Model.Group.GroupName + ".";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Threads:</h4>
+<hr />
+@Html.ActionLink("Start new thread", "AddThread", new { ID = Model.Group.GroupID })<br /><br />
+@if (Model.Threads.Count != 0)
+{
+    <div>
+        <ul>
+            @foreach (var item in Model.Threads)
+            {
+                <li>@Html.ActionLink(item.Title, "ViewThread", new { ID = item.ThreadID })</li>
+            }
+        </ul>
+        <hr />
+        Page @(Model.Threads.PageCount < Model.Threads.PageNumber ? 0 : Model.Threads.PageNumber) of @Model.Threads.PageCount
+        @Html.PagedListPager(Model.Threads, Page => Url.Action("ManageGroups", new { Page }))
+    </div>
+}
+else
+{
+    <p>There are no current threads. Start a new one!</p>
+}
+
+@Html.ActionLink("Back", "Index")

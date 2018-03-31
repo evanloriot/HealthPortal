@@ -1,0 +1,36 @@
+﻿@model HealthPortal.Models.ManageGroupsViewModel
+@using PagedList.Mvc
+
+@{
+    ViewBag.Title = "Manage Groups.";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusText</p>
+<h4>Groups:</h4>
+<hr />
+@if (Model.Groups.Count != 0)
+{
+    <div>
+        <ul>
+            @foreach (var item in Model.Groups)
+            {
+                <li>
+                    @Html.ActionLink(item.GroupName, "ViewGroup", new { ID = item.GroupID })
+                    [
+                    @Html.ActionLink("Delete", "DeleteGroup", new { ID = item.GroupID })
+                    ]
+                </li>
+            }
+            <li>@Html.ActionLink("Add group", "AddGroup")</li>
+        </ul>
+        Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
+        @Html.PagedListPager(Model.Groups, Page => Url.Action("ManageGroups", new { Page }))
+    </div>
+}
+else
+{
+    <p>There are no groups.</p>
+    @Html.ActionLink("Add group", "AddGroup")
+}
+

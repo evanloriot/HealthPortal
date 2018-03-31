@@ -30,6 +30,11 @@
                     {
                         <li>@Html.ActionLink("Appointments", "Index", "Appointment")</li>
                         <li>@Html.ActionLink("Medical History", "Index", "MedicalHistory")</li>
+                        <li>@Html.ActionLink("Forum", "Index", "Forum")</li>
+                    }
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        <li>@Html.ActionLink("Manage Forum Groups", "ManageGroups", "Forum")</li>
                     }
                     @if (User.IsInRole("Admin"))
                     {

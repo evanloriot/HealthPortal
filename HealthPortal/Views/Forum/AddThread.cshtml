@@ -1,0 +1,37 @@
+﻿@model HealthPortal.Models.AddThreadViewModel
+
+@{
+    ViewBag.Title = "New Thread.";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("AddThread", "Forum", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Form:</h4>
+    <hr />
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+    <input type="hidden" name="GroupID" value="@Model.GroupID" />
+    <div class="form-group">
+        @Html.LabelFor(m => m.Title, new { @class = "col-md-2 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.Title, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Message, new { @class = "col-md-2 control-label" })
+        <div class="col-md-8">
+            @Html.TextAreaFor(m => m.Message, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Submit thread" class="btn btn-default" />
+        </div>
+    </div>
+}
+@Html.ActionLink("Back", "ViewGroup", new { ID = Model.GroupID })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

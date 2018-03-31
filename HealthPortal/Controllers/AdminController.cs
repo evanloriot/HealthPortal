@@ -30,7 +30,7 @@ namespace HealthPortal.Controllers
             var users = context.Users.ToList();
             foreach (var name in users)
             {
-                this.users.Add(new AdminIndexViewModel { ID = name.Id, FullName = name.Identifier.FullName });
+                this.users.Add(new AdminIndexViewModel { ID = name.Id, Email = name.Email });
             }
         }
 

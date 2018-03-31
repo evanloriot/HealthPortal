@@ -1,0 +1,28 @@
+﻿@model HealthPortal.Models.ForumIndexViewModel
+@using PagedList.Mvc
+
+@{ 
+    ViewBag.Title = "Forum.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Groups:</h4>
+<hr />
+@if (Model.Groups.Count != 0)
+{
+    <div>
+        <ul>
+            @foreach (var item in Model.Groups)
+            {
+                <li>@Html.ActionLink(item.GroupName, "ViewGroup", new { ID = item.GroupID })</li>
+            }
+        </ul>
+        <hr />
+        Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
+        @Html.PagedListPager(Model.Groups, Page => Url.Action("ManageGroups", new { Page }))
+    </div>
+}
+else
+{
+    <p>There are no groups currently. Please contact your physician to start a group for the forum!</p>
+}

@@ -49,6 +49,9 @@ namespace HealthPortal.Models
         public DbSet<PrescriptionsMap> PrescriptionMap { get; set; }
         public DbSet<Diagnosis> Diagnoses { get; set; }
         public DbSet<DiagnosisMap> DiagnosisMap { get; set; }
+        public DbSet<Group> Groups { get; set; }
+        public DbSet<Thread> Threads { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
