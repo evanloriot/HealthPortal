@@ -189,6 +189,20 @@ namespace HealthPortal.Controllers
             return RedirectToAction("ViewThread", new { ID = result.ThreadID });
         }
 
+        //GET: Forum/DeleteThread{int, int}
+        public ActionResult DeleteThread(int? ID, int? GroupID)
+        {
+            if(ID == null || GroupID == null)
+            {
+                return View("Error");
+            }
+            var db = new ApplicationDbContext();
+            var thread = db.Threads.Where(u => u.ThreadID == ID).FirstOrDefault();
+            db.Threads.Remove(thread);
+            db.SaveChanges();
+            return RedirectToAction("ViewGroup", new { ID = GroupID });
+        }
+
         //GET: Forum/ViewThread/{int}
         public ActionResult ViewThread(int? page, int? ID)
         {
@@ -245,6 +259,20 @@ namespace HealthPortal.Controllers
             db.Posts.Add(post);
             db.SaveChanges();
             return RedirectToAction("ViewThread", new { ID = model.ThreadID });
+        }
+
+        //GET: Forum/DeletePost/{int}
+        public ActionResult DeletePost(int? ID, int? ThreadID)
+        {
+            if(ID == null || ThreadID == null)
+            {
+                return View("Error");
+            }
+            var db = new ApplicationDbContext();
+            var post = db.Posts.Where(u => u.PostID == ID).FirstOrDefault();
+            post.Deleted = true;
+            db.SaveChanges();
+            return RedirectToAction("ViewThread", new { ID = ThreadID });
         }
 
         public enum ForumMessageId

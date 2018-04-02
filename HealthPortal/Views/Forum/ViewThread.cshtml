@@ -1,12 +1,22 @@
 ﻿@model HealthPortal.Models.ViewThreadViewModel
 @using PagedList.Mvc
+@using Microsoft.AspNet.Identity
 
 @{
     ViewBag.Title = Model.Thread.Title;
 }
 
 <h2>@ViewBag.Title</h2>
-<p>@Model.Thread.Message</p>
+@if (Model.Thread.User.DisplayName != null)
+{
+    <p style="color: grey">@Model.Thread.User.DisplayName</p>
+}
+else
+{
+    <p style="color: grey">@Model.Thread.User.Identifier.FullName.Split(' ')[0]:</p>
+}
+<p style="margin-left:5%">@Model.Thread.Message</pstyle="margin-left:5%">
+
 <h4>Posts:</h4>
 <hr />
 @if (Model.Posts.Count != 0)
@@ -15,15 +25,34 @@
         <div>
             @foreach (var item in Model.Posts)
             {
-                if (item.User.DisplayName != null)
+                if (!item.Deleted)
                 {
-                    <p style="color: grey">@item.User.DisplayName:</p>
+                    if (item.User.DisplayName != null)
+                    {
+                        <p style="color: grey">@item.User.DisplayName:</p>
+                    }
+                    else
+                    {
+                        <p style="color: grey">@item.User.Identifier.FullName.Split(' ')[0]:</p>
+                    }
+                }
+
+                if (!item.Deleted)
+                {
+                    <p style="margin-left:5%">@item.Message</p>
                 }
                 else
                 {
-                    <p style="color: grey">@item.User.Identifier.FullName.Split(' ')[0]:</p>
+                    <p style="margin-left:5%; color: grey">[deleted]</p>
                 }
-                <p style="margin-left:5%">@item.Message</p>
+                if (!item.Deleted && (User.Identity.GetUserId() == item.UserID || User.IsInRole("Doctor")))
+                {
+                    <p>
+                        [
+                        @Html.ActionLink("Delete Post", "DeletePost", new { ID = item.PostID, ThreadID = item.ThreadID })
+                        ]
+                    </p>
+                }
                 <hr />
             }
             @Html.ActionLink("Post response", "AddPost", new { ID = Model.Thread.ThreadID })<br /><br />

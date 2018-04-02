@@ -15,7 +15,23 @@
         <ul>
             @foreach (var item in Model.Threads)
             {
-                <li>@Html.ActionLink(item.Title, "ViewThread", new { ID = item.ThreadID })</li>
+                <li>
+                    @Html.ActionLink(item.Title, "ViewThread", new { ID = item.ThreadID })
+                    @if (item.User.DisplayName != null)
+                    {
+                        <span style="color: grey">(@item.User.DisplayName)</span>
+                    }
+                    else
+                    {
+                        <span style="color: grey">(@item.User.Identifier.FullName.Split(' ')[0])</span>
+                    }
+                    @if (User.IsInRole("Doctor"))
+                    {
+                        @(new HtmlString("["))
+                        @Html.ActionLink("Delete Thread", "DeleteThread", new { ID = item.ThreadID, GroupID = item.GroupID })
+                        @(new HtmlString("]"))
+                    }
+                </li>
             }
         </ul>
         <hr />
