@@ -122,6 +122,12 @@ namespace HealthPortal.Controllers
         {
             string reason = Request.Form["reas"];
             string date = Request.Form["value"];
+
+            if(reason == null || date == null)
+            {
+                return View(model);
+            }
+
             DateTime TimeDate = Convert.ToDateTime(date);
 
             var db = new ApplicationDbContext();
@@ -217,6 +223,7 @@ namespace HealthPortal.Controllers
             return View(model);
         }
 
+        //POST: Appointment/AddResponse
         [HttpPost]
         public ActionResult AddResponse(AddResponseViewModel model)
         {
@@ -249,6 +256,10 @@ namespace HealthPortal.Controllers
 
         public ActionResult DeleteAppointment()
         {
+            if (Request.Form["ID"] == null)
+            {
+                return View("Error");
+            }
             int id = Convert.ToInt32(Request.Form["ID"]);
             var db = new ApplicationDbContext();
             var apt = db.Appointments.Where(u => u.AppointmentID == id).FirstOrDefault();

@@ -23,6 +23,8 @@ namespace HealthPortal.Models
 
         public string Message { get; set; }
 
+        public bool Deleted { get; set; }
+
         public virtual ApplicationUser User { get; set; }
         public virtual Thread Thread { get; set; }
     }

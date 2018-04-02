@@ -14,7 +14,9 @@ namespace HealthPortal.Models
 
     public class AddGroupViewModel
     {
+        [Required]
         [Display(Name = "Group Name")]
+        [MaxLength(30)]
         public string GroupName { get; set; }
     }
 
@@ -33,6 +35,7 @@ namespace HealthPortal.Models
     {
         public int GroupID { get; set; }
         [Required]
+        [MaxLength(256)]
         public string Title { get; set; }
         public string Message { get; set; }
         public DateTime TimeDate { get; set; }

@@ -93,6 +93,10 @@ namespace HealthPortal.Controllers
         // GET: MedicalHistory/AddMedicalHistory
         public ActionResult AddMedicalHistory(string ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var model = new AddMedicalHistoryViewModel
             {
                 ID = ID
@@ -105,6 +109,10 @@ namespace HealthPortal.Controllers
         [HttpPost]
         public ActionResult AddMedicalHistory(AddMedicalHistoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var userId = model.ID;
             var detail = new MedicalHistory
             {
@@ -119,13 +127,17 @@ namespace HealthPortal.Controllers
         }
 
         // GET: MedicalHistory/EditMedicalHistory
-        public ActionResult EditMedicalHistory(int ID)
+        public ActionResult EditMedicalHistory(int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var detail = db.MedicalHistory.Where(u => u.MedicalHistoryID == ID).FirstOrDefault();
             var model = new EditMedicalHistoryViewModel
             {
-                ID = ID,
+                ID = (int) ID,
                 Details = detail.Details
             };
             return View(model);
@@ -135,6 +147,10 @@ namespace HealthPortal.Controllers
         [HttpPost]
         public ActionResult EditMedicalHistory(EditMedicalHistoryViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var db = new ApplicationDbContext();
             var record = db.MedicalHistory.Where(u => u.MedicalHistoryID == model.ID).FirstOrDefault();
             record.Details = model.Details;
@@ -143,8 +159,12 @@ namespace HealthPortal.Controllers
             return RedirectToAction("Index", new { Message = MedicalHistoryMessageId.EditMedicalHistorySuccess });
         }
 
-        public ActionResult DeleteMedicalHistory(int ID)
+        public ActionResult DeleteMedicalHistory(int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var record = db.MedicalHistory.Where(u => u.MedicalHistoryID == ID).FirstOrDefault();
             db.MedicalHistory.Remove(record);

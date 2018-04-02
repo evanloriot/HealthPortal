@@ -89,6 +89,10 @@ namespace HealthPortal.Controllers
         [HttpPost]
         public ActionResult AddGroup(AddGroupViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var group = new Group
             {
                 GroupName = model.GroupName
@@ -99,8 +103,13 @@ namespace HealthPortal.Controllers
             return RedirectToAction("ManageGroups", new { Message = ForumMessageId.AddGroupSuccess });
         }
 
-        public ActionResult DeleteGroup(int ID)
+        //GET: Forum/DeleteGroup
+        public ActionResult DeleteGroup(int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var group = db.Groups.Where(u => u.GroupID == ID).FirstOrDefault();
             db.Groups.Remove(group);
@@ -125,8 +134,12 @@ namespace HealthPortal.Controllers
 
         //GET: Forum/ViewGroup/{Int}
         [AllowAnonymous]
-        public ActionResult ViewGroup(int? page, int ID)
+        public ActionResult ViewGroup(int? page, int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var threads = db.Threads.Where(u => u.GroupID == ID).OrderBy(u => u.TimeDate).ToList();
             var group = db.Groups.Where(u => u.GroupID == ID).FirstOrDefault();
@@ -141,11 +154,15 @@ namespace HealthPortal.Controllers
         }
 
         //GET: Forum/AddThread/{int}
-        public ActionResult AddThread(int ID)
+        public ActionResult AddThread(int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var model = new AddThreadViewModel
             {
-                GroupID = ID
+                GroupID = (int) ID
             };
             return View(model);
         }
@@ -160,6 +177,7 @@ namespace HealthPortal.Controllers
             }
             var thread = new Thread
             {
+                UserID = User.Identity.GetUserId(),
                 Title = model.Title,
                 GroupID = model.GroupID,
                 Message = model.Message,
@@ -172,8 +190,12 @@ namespace HealthPortal.Controllers
         }
 
         //GET: Forum/ViewThread/{int}
-        public ActionResult ViewThread(int? page, int ID)
+        public ActionResult ViewThread(int? page, int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var posts = db.Posts.Where(u => u.ThreadID == ID).OrderBy(u => u.TimeDate).ToList();
             var thread = db.Threads.Where(u => u.ThreadID == ID).FirstOrDefault();
@@ -187,14 +209,18 @@ namespace HealthPortal.Controllers
         }
 
         //GET: Forum/AddPost/{int}
-        public ActionResult AddPost(int ID)
+        public ActionResult AddPost(int? ID)
         {
+            if(ID == null)
+            {
+                return View("Error");
+            }
             var db = new ApplicationDbContext();
             var thread = db.Threads.Where(u => u.ThreadID == ID).FirstOrDefault();
             var model = new AddPostViewModel
             {
                 Thread = thread,
-                ThreadID = ID
+                ThreadID = (int) ID
             };
             return View(model);
         }
@@ -203,13 +229,18 @@ namespace HealthPortal.Controllers
         [HttpPost]
         public ActionResult AddPost(AddPostViewModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
             var db = new ApplicationDbContext();
             var post = new Post
             {
                 UserID = User.Identity.GetUserId(),
                 TimeDate = DateTime.Now,
                 ThreadID = model.ThreadID,
-                Message = model.Message
+                Message = model.Message,
+                Deleted = false
             };
             db.Posts.Add(post);
             db.SaveChanges();

@@ -13,6 +13,9 @@ namespace HealthPortal.Models
         [Key]
         public int ThreadID { get; set; }
 
+        [ForeignKey("User")]
+        public string UserID { get; set; }
+
         public string Title { get; set; }
 
         [ForeignKey("Group")]
@@ -23,5 +26,7 @@ namespace HealthPortal.Models
         public DateTime TimeDate { get; set; }
 
         public virtual Group Group { get; set; }
+
+        public virtual ApplicationUser User { get; set; }
     }
 }
