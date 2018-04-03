@@ -208,7 +208,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AdminViewModels.cs" />
     <Compile Include="Models\Appointment.cs" />
-    <Compile Include="Models\AppointmentViewModel.cs" />
+    <Compile Include="Models\AppointmentViewModels.cs" />
     <Compile Include="Models\CheckUpResponse.cs" />
     <Compile Include="Models\Diagnosis.cs" />
     <Compile Include="Models\DiagnosisMap.cs" />
