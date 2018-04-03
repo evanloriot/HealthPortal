@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNet.Identity.Owin;
+﻿using HealthPortal.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,7 +52,22 @@ namespace HealthPortal.Controllers
         // GET: Diagnosis
         public ActionResult Index()
         {
-            return View();
+            var userID = User.Identity.GetUserId();
+            var db = new ApplicationDbContext();
+            var dms = db.DiagnosisMap.Where(u => u.UserID == userID).ToList();
+
+            List<Diagnosis> diagnoses = new List<Diagnosis>();
+            foreach(var item in dms)
+            {
+                diagnoses.Add(item.Diagnosis);
+            }
+
+            var model = new DiagnosisIndexViewModel
+            {
+                Diagnoses = diagnoses
+            };
+
+            return View(model);
         }
     }
 }

@@ -19,6 +19,6 @@ namespace HealthPortal.Models
         public int DiagnosisID { get; set; }
 
         public virtual ApplicationUser User { get; set; }
-        public Diagnosis Diagnosis { get; set; }
+        public virtual Diagnosis Diagnosis { get; set; }
     }
 }
