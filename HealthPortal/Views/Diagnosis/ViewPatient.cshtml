@@ -1,0 +1,31 @@
+﻿@model HealthPortal.Models.ViewPatientViewModel
+
+@{
+    ViewBag.Title = "View Patient Page";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<h4>List of your @Model.PatientName's History:</h4>
+<hr />
+<table>
+    <tr>
+        <th>
+            Diagnosis
+        </th>
+    </tr>
+    @foreach (var item in Model.Diagnoses)
+    {
+        <tr>
+            <td>
+                @item.DiagnosisName
+            </td>
+        </tr>
+    }
+</table>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -8,8 +8,26 @@
 <p class="text-success">@ViewBag.StatusMessage</p>
 @if (User.IsInRole("Doctor"))
 {
-    <h4>List of your Patient Diagnosis Information:</h4>
+    <h4>List of Patients under your care:</h4>
     <hr />
+    <table>
+        <tr>
+            <th>
+                Patient Name
+            </th>
+        </tr>
+        @foreach (var patient in Model.PatientList)
+        {
+            <tr>
+               <td>
+                   @Html.ActionLink(patient.Identifier.FullName, "ViewPatient", new {userID = patient.Id})
+               </td> 
+            </tr>
+        }
+    </table>
+
+    <p>@Html.ActionLink("Add a Diagnosis Option", "AddDiagnosis")</p>
+
 }
 else
 {
