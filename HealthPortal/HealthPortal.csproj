@@ -213,6 +213,7 @@
     <Compile Include="Models\CheckUpResponse.cs" />
     <Compile Include="Models\Diagnosis.cs" />
     <Compile Include="Models\DiagnosisMap.cs" />
+    <Compile Include="Models\DiagnosisViewModels.cs" />
     <Compile Include="Models\ForumViewModels.cs" />
     <Compile Include="Models\Group.cs" />
     <Compile Include="Models\IdentityModels.cs" />
