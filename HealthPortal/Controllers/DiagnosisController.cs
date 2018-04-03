@@ -52,22 +52,87 @@ namespace HealthPortal.Controllers
         // GET: Diagnosis
         public ActionResult Index()
         {
-            var userID = User.Identity.GetUserId();
+            if(User.IsInRole("Patient"))
+            {
+                var userID = User.Identity.GetUserId();
+                var db = new ApplicationDbContext();
+                var dms = db.DiagnosisMap.Where(u => u.UserID == userID).ToList();
+
+                List<Diagnosis> diagnoses = new List<Diagnosis>();
+                foreach (var item in dms)
+                {
+                    diagnoses.Add(item.Diagnosis);
+                }
+
+                var model = new DiagnosisIndexViewModel
+                {
+                    Diagnoses = diagnoses
+                };
+
+                return View(model);
+            } else
+            {
+                var docID = User.Identity.GetUserId();
+                var db = new ApplicationDbContext();
+                var docpatients = db.Users.Where(u => u.PrimaryPhysician.Id == docID).ToList();
+
+                var model = new DiagnosisIndexViewModel
+                {
+                    PatientList = docpatients
+                };
+
+                return View(model);
+            }
+        }
+
+        public ActionResult ViewPatient(string userID)
+        {
             var db = new ApplicationDbContext();
             var dms = db.DiagnosisMap.Where(u => u.UserID == userID).ToList();
 
+            var name = db.Users.Where(u => u.Id == userID).FirstOrDefault().Identifier.FullName;
+
             List<Diagnosis> diagnoses = new List<Diagnosis>();
-            foreach(var item in dms)
+            foreach (var item in dms)
             {
                 diagnoses.Add(item.Diagnosis);
             }
 
-            var model = new DiagnosisIndexViewModel
+            var model = new ViewPatientViewModel
             {
-                Diagnoses = diagnoses
+                Diagnoses = diagnoses,
+                PatientName = name
             };
 
             return View(model);
+        }
+
+        public ActionResult AddDiagnosis()
+        {
+            var model = new AddDiagnosisViewModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddDiagnosis(AddDiagnosisViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var db = new ApplicationDbContext();
+
+            var diagnosis = new Diagnosis
+            {
+                DiagnosisName = model.DiagnosisName
+            };
+
+            db.Diagnoses.Add(diagnosis);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }

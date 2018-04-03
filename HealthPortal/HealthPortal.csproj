@@ -408,6 +408,9 @@
     <Content Include="Views\Forum\AddThread.cshtml" />
     <Content Include="Views\Forum\ViewThread.cshtml" />
     <Content Include="Views\Forum\AddPost.cshtml" />
+    <Content Include="Views\Diagnosis\ViewPatient.cshtml" />
+    <Content Include="Views\Diagnosis\AddDiagnosis.cshtml" />
+    <Content Include="Views\Diagnosis\AddDiagnosisToPatient.cshtml" />
     <Content Include="Views\Physician\Index.cshtml" />
     <Content Include="Views\Physician\ViewPatient.cshtml" />
     <Content Include="Views\Physician\ViewPatientDiagnosisBreakdown.cshtml" />
