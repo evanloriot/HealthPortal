@@ -25,10 +25,11 @@
                     {
                         <li>@Html.ActionLink("Profile", "Index", "Manage")</li>
                     }
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Appointments", "Index", "Appointment")</li>
+                        <li>@Html.ActionLink("Diagnosis", "Index", "Diagnosis")</li>
+                        <li>@Html.ActionLink("Prescription", "Index", "Prescription")</li>
                         <li>@Html.ActionLink("Medical History", "Index", "MedicalHistory")</li>
                         <li>@Html.ActionLink("Forum", "Index", "Forum")</li>
                     }
