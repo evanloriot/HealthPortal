@@ -180,7 +180,7 @@ namespace HealthPortal.Controllers
                 UserID = User.Identity.GetUserId(),
                 Title = model.Title,
                 GroupID = model.GroupID,
-                Message = model.Message,
+                Message = model.Message == null? "" : model.Message,
                 TimeDate = DateTime.Now
             };
             var db = new ApplicationDbContext();
