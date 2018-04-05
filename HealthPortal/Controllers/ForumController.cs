@@ -134,7 +134,7 @@ namespace HealthPortal.Controllers
 
         //GET: Forum/ViewGroup/{Int}
         [AllowAnonymous]
-        public ActionResult ViewGroup(int? page, int? ID)
+        public ActionResult ViewGroup(int? ID, int? page)
         {
             if(ID == null)
             {

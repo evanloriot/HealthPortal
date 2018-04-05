@@ -36,7 +36,7 @@
         </ul>
         <hr />
         Page @(Model.Threads.PageCount < Model.Threads.PageNumber ? 0 : Model.Threads.PageNumber) of @Model.Threads.PageCount
-        @Html.PagedListPager(Model.Threads, Page => Url.Action("ManageGroups", new { Page }))
+        @Html.PagedListPager(Model.Threads, Page => Url.Action("ViewGroup", new { ID = Model.Group.GroupID, Page }))
     </div>
 }
 else
