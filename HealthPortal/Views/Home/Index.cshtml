@@ -21,7 +21,8 @@
 {
     <div>
         <h2>Doctor Management:</h2>
-        @Html.ActionLink("Manage Forum Groups", "ManageGroups", "Forum")
+        @Html.ActionLink("Manage Forum Groups", "ManageGroups", "Forum")<br />
+        @Html.ActionLink("Manage Patients", "Index", "Physician")
     </div>
 }
 @if (User.IsInRole("Admin"))

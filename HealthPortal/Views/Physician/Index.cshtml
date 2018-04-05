@@ -1,0 +1,28 @@
+﻿@model HealthPortal.Models.PhysicianIndexViewModel
+@using PagedList.Mvc
+
+@{ 
+    ViewBag.Title = "View Patients.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Patients:</h4>
+<hr />
+
+@if (!User.IsInRole("Doctor"))
+{
+    <p class="text-danger">Please sign into physician account to access patient records.</p>
+}
+else
+{
+    <ul>
+        @foreach(var item in Model.Patients)
+        {
+            <li>@Html.ActionLink(item.Identifier.FullName, "ViewPatient", new { ID = item.Id })</li>
+        }
+        <br />
+        Page @(Model.Patients.PageCount < Model.Patients.PageNumber ? 0 : Model.Patients.PageNumber) of @Model.Patients.PageCount
+        @Html.PagedListPager(Model.Patients, Page => Url.Action("Index", new { Page }))
+    </ul>
+
+}
