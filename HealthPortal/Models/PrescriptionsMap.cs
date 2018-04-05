@@ -7,7 +7,7 @@ using System.Web;
 
 namespace HealthPortal.Models
 {
-    [Table("PrescriptionsMap")]
+    [Table("PrescriptionMap")]
     public class PrescriptionsMap
     {
         [Key]
