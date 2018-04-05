@@ -9,6 +9,18 @@
 
 <h4>Change Physician Form</h4>
 <hr />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <p>
+        Find by name: @Html.TextBox("SearchString")
+        <input type="hidden" name="isSearch" value="true" />
+        <input type="submit" value="Search" />
+    </p>
+}
+
+
 @Html.ValidationSummary("", new { @class = "text-danger" })
 <div class="form-group">
     @Html.Label("Physicians:", new { @class = "col-md-1 control-label" })<br /><br />
@@ -24,6 +36,7 @@
                 </p>
             </div>
             <input type="hidden" name="Physician" value="@item.IdentifierID" />
+            <input type="hidden" name="isSearch" value="false" />
             <input type="submit" class="btn btn-default" value="Select" title="Select this physician." />
         }
     }

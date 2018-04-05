@@ -140,13 +140,32 @@ namespace HealthPortal.Controllers
             {
                 return View("Error");
             }
+            string search = null;
+            if(Request.Form["SearchString"] != null && Request.Form["SearchString"] != "")
+            {
+                search = Request.Form["SearchString"];
+            }
             var db = new ApplicationDbContext();
-            var threads = db.Threads.Where(u => u.GroupID == ID).OrderBy(u => u.TimeDate).ToList();
+            List<Thread> threads = new List<Thread>();
+            if (search != null)
+            {
+                var results = from thread in db.Threads
+                              join post in db.Posts on thread.ThreadID equals post.ThreadID
+                              where thread.GroupID == ID && (thread.Title.ToLower().Contains(search.ToLower()) || post.Message.Contains(search.ToLower()) || thread.Message.Contains(search.ToLower()))
+                              orderby thread.TimeDate descending
+                              select thread;
+                threads = results.ToList();
+            }
+            else
+            {
+                threads = db.Threads.Where(u => u.GroupID == ID).OrderByDescending(u => u.TimeDate).ToList();
+            }
             var group = db.Groups.Where(u => u.GroupID == ID).FirstOrDefault();
 
             var currentPage = page ?? 1;
             var model = new ViewGroupViewModel
             {
+                Search = search,
                 Group = group,
                 Threads = threads.ToPagedList(currentPage, DefaultPageSize)
             };

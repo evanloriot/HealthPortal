@@ -68,6 +68,12 @@ namespace HealthPortal.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index(int? page, AdminMessageId? message)
         {
+            string search = null;
+            if (Request.Form["SearchString"] != null)
+            {
+                search = Request.Form["SearchString"];
+            }
+
             ViewBag.StatusMessage =
                 message == AdminMessageId.ManageRoleSuccess ? "You have successfully changed user role."
                 : "";
@@ -79,7 +85,14 @@ namespace HealthPortal.Controllers
             }
 
             int currentPageIndex = page ?? 1;
-            return View(this.users.ToPagedList(currentPageIndex, DefaultPageSize));
+            if (search != null)
+            {
+                return View(this.users.Where(u => u.Email.ToLower().Contains(search.ToLower())).OrderBy(u => u.Email).ToPagedList(currentPageIndex, DefaultPageSize));
+            }
+            else
+            {
+                return View(this.users.OrderBy(u => u.Email).ToPagedList(currentPageIndex, DefaultPageSize));
+            }
         }
 
         // GET: Admin

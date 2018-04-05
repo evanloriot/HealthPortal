@@ -68,7 +68,7 @@ namespace HealthPortal.Controllers
             
             if (User.IsInRole("Doctor"))
             {
-                Patients = db.Users.Where(u => u.PhysicianID == userId).ToList();
+                Patients = db.Users.Where(u => u.PhysicianID == userId).OrderBy(u => u.Identifier.FullName).ToList();
             }
             Dictionary<string, List<MedicalHistory>> patientHistory = new Dictionary<string, List<MedicalHistory>>();
             if(Patients.Count != 0)

@@ -25,20 +25,19 @@
                     {
                         <li>@Html.ActionLink("Profile", "Index", "Manage")</li>
                     }
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Appointments", "Index", "Appointment")</li>
-                        <li>@Html.ActionLink("Medical History", "Index", "MedicalHistory")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">History <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Medical History", "Index", "MedicalHistory")</li>
+                                <li>@Html.ActionLink("Diagnoses", "Index", "Diagnosis")</li>
+                                <li>@Html.ActionLink("Prescriptions", "Index", "Prescription")</li>
+                            </ul>
+                        </li>
+                        
                         <li>@Html.ActionLink("Forum", "Index", "Forum")</li>
-                    }
-                    @if (User.IsInRole("Doctor"))
-                    {
-                        <li>@Html.ActionLink("Manage Forum Groups", "ManageGroups", "Forum")</li>
-                    }
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <li>@Html.ActionLink("Admin", "Index", "Admin")</li>
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")
@@ -57,5 +56,10 @@
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/datetime")
     @RenderSection("scripts", required: false)
+    <style type="text/css">
+	    ul.nav li.dropdown:hover > ul.dropdown-menu {
+    	    display: block;    
+        }
+    </style>
 </body>
 </html>

@@ -2,9 +2,9 @@
 @using PagedList.Mvc
 
 @{
-                /**/
+    /**/
 
-                ViewBag.Title = "Manage Users.";
+    ViewBag.Title = "Manage Users.";
 }
 
 @if (!User.IsInRole("Admin"))
@@ -18,6 +18,13 @@ else
     <p class="text-success">@ViewBag.StatusMessage</p>
     <h4>Users</h4>
     <hr />
+    using (Html.BeginForm())
+    {
+        <p>
+            Find by email: @Html.TextBox("SearchString")
+            <input type="submit" value="Search" />
+        </p>
+    }
     <div>
         @foreach (var item in Model)
         {

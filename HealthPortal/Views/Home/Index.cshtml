@@ -4,8 +4,30 @@
 
 <div class="jumbotron">
     <h1>Health Portal</h1>
-    <p class="lead">The Health Portal is an online application designed to help patients quickly and efficiently get in contact with 
-    their doctors and nurses. It allows patients to easily schedule appointments with their doctors, have access to forums where 
-    they can ask questions and licensed doctors would have a place to quickly address any issues. Additionally, it provides doctors
-    and nurses an easy system to manage their patients and patient details such as prescriptions, diagnosis, etc.</p>
+    <p class="lead">
+        The Health Portal is an online application designed to help patients quickly and efficiently get in contact with
+        their doctors and nurses. It allows patients to easily schedule appointments with their doctors, have access to forums where
+        they can ask questions and licensed doctors would have a place to quickly address any issues. Additionally, it provides doctors
+        and nurses an easy system to manage their patients and patient details such as prescriptions, diagnosis, etc.
+    </p>
+    @Html.ActionLink("Manage Profile", "Index", "Manage")<br />
+    @Html.ActionLink("Schedule/View Appointments", "Index", "Appointment")<br />
+    @Html.ActionLink("View Medical History", "Index", "MedicalHistory")<br />
+    @Html.ActionLink("View Diagnoses", "Index", "Diagnosis")<br />
+    @Html.ActionLink("View Prescriptions", "Index", "Prescription")<br />
+    @Html.ActionLink("View Forum", "Index", "Forum")<br />
 </div>
+@if (User.IsInRole("Doctor"))
+{
+    <div>
+        <h2>Doctor Management:</h2>
+        @Html.ActionLink("Manage Forum Groups", "ManageGroups", "Forum")
+    </div>
+}
+@if (User.IsInRole("Admin"))
+{
+    <div>
+        <h2>Admin Management:</h2>
+        @Html.ActionLink("Manage Roles", "Index", "Admin")
+    </div>
+}

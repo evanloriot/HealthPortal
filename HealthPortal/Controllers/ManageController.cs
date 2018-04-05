@@ -110,7 +110,7 @@ namespace HealthPortal.Controllers
 
         //
         //GET: /Manage/ChangePhysician
-        public ActionResult ChangePhysician(int? page)
+        public ActionResult ChangePhysician(int? page, string search)
         {
             var db = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
@@ -123,10 +123,21 @@ namespace HealthPortal.Controllers
                         .Where(UI => UI.User.Roles.Any(r => r.RoleId == role) && UI.User.Id != userId);
 
             IList<Identifiers> physicians = new List<Identifiers>();
-            foreach (var item in users)
+            foreach (var item in users.OrderBy(u => u.Identifier.FullName))
             {
-                physicians.Add(item.Identifier);
+                if(search != null)
+                {
+                    if (item.Identifier.FullName.ToLower().Contains(search.ToLower()))
+                    {
+                        physicians.Add(item.Identifier);
+                    }
+                }
+                else
+                {
+                    physicians.Add(item.Identifier);
+                }
             }
+            
 
             int currentPageIndex = page ?? 1;
             return View(physicians.ToPagedList(currentPageIndex, DefaultPageSize));
@@ -138,6 +149,10 @@ namespace HealthPortal.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePhysician()
         {
+            if (Request.Form["isSearch"] == "true")
+            {
+                return RedirectToAction("ChangePhysician", new { search = Request.Form["SearchString"] });
+            }
             var userId = User.Identity.GetUserId();
             var user = UserManager.FindById(userId);
 
@@ -149,7 +164,7 @@ namespace HealthPortal.Controllers
                 return RedirectToAction("Index", new { Message = ManageMessageId.ChangePhysicianSuccess });
             }
             AddErrors(result);
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         //

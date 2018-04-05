@@ -8,6 +8,13 @@
 <h2>@ViewBag.Title</h2>
 <h4>Threads:</h4>
 <hr />
+@using (Html.BeginForm())
+{
+    <p>
+        Search Threads: @Html.TextBox("SearchString")
+        <input type="submit" value="Search" />
+    </p>
+}
 @Html.ActionLink("Start new thread", "AddThread", new { ID = Model.Group.GroupID })<br /><br />
 @if (Model.Threads.Count != 0)
 {
@@ -41,7 +48,14 @@
 }
 else
 {
-    <p>There are no current threads. Start a new one!</p>
+    if (Model.Search == null)
+    {
+        <p>There are no current threads. Start a new one!</p>
+    }
+    else
+    {
+        <p>There are no threads that are associated with "@Model.Search" as a parameter. Please try different parameters.</p>
+    }
 }
 
 @Html.ActionLink("Back", "Index")

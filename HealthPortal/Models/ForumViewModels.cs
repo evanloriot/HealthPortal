@@ -27,6 +27,7 @@ namespace HealthPortal.Models
 
     public class ViewGroupViewModel
     {
+        public string Search { get; set; }
         public Group Group { get; set; }
         public IPagedList<Thread> Threads { get; set; }
     }
