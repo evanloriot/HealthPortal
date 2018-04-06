@@ -87,6 +87,11 @@ namespace HealthPortal.Controllers
 
         public ActionResult ViewPatient(string userID)
         {
+            if(userID == null)
+            {
+                return View("Error");
+            }
+
             var db = new ApplicationDbContext();
             var dms = db.DiagnosisMap.Where(u => u.UserID == userID).ToList();
 
@@ -101,7 +106,8 @@ namespace HealthPortal.Controllers
             var model = new ViewPatientViewModel
             {
                 Diagnoses = diagnoses,
-                PatientName = name
+                PatientName = name,
+                PatientID = userID
             };
 
             return View(model);
@@ -130,6 +136,54 @@ namespace HealthPortal.Controllers
             };
 
             db.Diagnoses.Add(diagnosis);
+            db.SaveChanges();
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult AddDiagnosisToPatient(string patientID)
+        {
+
+            if (patientID == null)
+            {
+                return View("Error");
+            }
+
+            var db = new ApplicationDbContext();
+            var d = db.Diagnoses.ToList();
+            var dm = db.DiagnosisMap.ToList();
+
+            var name = db.Users.Where(u => u.Id == patientID).FirstOrDefault().Identifier.FullName;
+
+            var model = new AddDiagnosisToPatientViewModel
+            {
+                Diagnoses = d,
+                PatientName = name,
+                PatientID = patientID,
+            };
+            
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddDiagnosisToPatient(AddDiagnosisToPatientViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                //var err = ModelState.Where(x => x.Value.Errors.Any()).Select(x => new { x.Key, x.Value.Errors });
+                return View(model);
+            }
+
+            var db = new ApplicationDbContext();
+
+            var patientDiagnosis = new DiagnosisMap
+            {
+                UserID = model.PatientID,
+                DiagnosisID = model.DiagnosisID
+            };
+
+            db.DiagnosisMap.Add(patientDiagnosis);
             db.SaveChanges();
 
             return RedirectToAction("Index");
