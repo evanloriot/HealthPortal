@@ -28,5 +28,6 @@ namespace HealthPortal.Models
     public class ViewPatientDiagnosisBreakdownViewModel
     {
         public IList<DiagnosisGrouping> Rows { get; set; }
+        public decimal? Shift { get; set; }
     }
 }
