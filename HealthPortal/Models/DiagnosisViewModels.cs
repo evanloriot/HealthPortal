@@ -17,11 +17,20 @@ namespace HealthPortal.Models
     {
         public string PatientName { get; set; }
         public virtual IList<Diagnosis> Diagnoses { get; set; }
+        public string PatientID { get; set; } 
     }
 
     public class AddDiagnosisViewModel
     {
         [Required]
         public string DiagnosisName { get; set; }
+    }
+
+    public class AddDiagnosisToPatientViewModel
+    {
+        public virtual IList<Diagnosis> Diagnoses { get; set; }
+        public int DiagnosisID { get; set; }
+        public string PatientID { get; set; }
+        public string PatientName { get; set; }
     }
 }
