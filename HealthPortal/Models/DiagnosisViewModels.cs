@@ -13,7 +13,7 @@ namespace HealthPortal.Models
         public virtual IList<ApplicationUser> PatientList { get; set; }
     }
 
-    public class ViewPatientViewModel
+    public class ViewPatientDiagnosisViewModel
     {
         public string PatientName { get; set; }
         public virtual IList<Diagnosis> Diagnoses { get; set; }

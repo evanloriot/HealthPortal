@@ -103,7 +103,7 @@ namespace HealthPortal.Controllers
                 diagnoses.Add(item.Diagnosis);
             }
 
-            var model = new ViewPatientViewModel
+            var model = new ViewPatientDiagnosisViewModel
             {
                 Diagnoses = diagnoses,
                 PatientName = name,
