@@ -1,0 +1,21 @@
+﻿@model HealthPortal.Models.ViewDiagnosesViewModel
+
+@{ 
+    ViewBag.Title = "View Diagnoses.";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<h4>Diagnoses:</h4>
+<ul>
+    @foreach (var item in Model.Diagnoses)
+    {
+        <li>
+            @item.DiagnosisName
+            [
+            @Html.ActionLink("Delete Diagnosis", "DeleteDiagnosis", new { ID = item.DiagnosisID })
+            ]
+        </li>
+    }
+</ul>
+@Html.ActionLink("Back", "Index")

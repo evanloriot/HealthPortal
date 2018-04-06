@@ -25,11 +25,16 @@
             </tr>
         }
     </table>
+    if(Model.PatientList.Count == 0)
+    {
+        <p>You have no patients currently!</p>
+    }
 
     <br />
     <br />
 
     <p>@Html.ActionLink("Add a Diagnosis Option", "AddDiagnosis")</p>
+    @Html.ActionLink("View Diagnoses Options", "ViewDiagnoses")
 
 }
 else

@@ -33,4 +33,9 @@ namespace HealthPortal.Models
         public string PatientID { get; set; }
         public string PatientName { get; set; }
     }
+
+    public class ViewDiagnosesViewModel
+    {
+        public virtual IList<Diagnosis> Diagnoses { get; set; }
+    }
 }

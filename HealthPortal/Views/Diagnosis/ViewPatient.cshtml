@@ -20,10 +20,17 @@
         <tr>
             <td>
                 @item.DiagnosisName
+                [
+                @Html.ActionLink("Delete", "DeleteDiagnosisFromPatient", new { userID = Model.PatientID, ID = item.DiagnosisID })
+                ]
             </td>
         </tr>
     }
 </table>
+@if (Model.Diagnoses.Count == 0)
+{
+    <p>Patient currently had no diagnoses!</p>
+}
 
 <br />
 
