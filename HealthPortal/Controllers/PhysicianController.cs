@@ -99,5 +99,20 @@ namespace HealthPortal.Controllers
             };
             return View(model);
         }
+
+        public ActionResult ViewPatientDiagnosisBreakdown()
+        {
+            var db = new ApplicationDbContext();
+            var results = from diagnosisMap in db.DiagnosisMap
+                          join diagnosis in db.Diagnoses on diagnosisMap.DiagnosisID equals diagnosis.DiagnosisID
+                          group diagnosis by diagnosis.DiagnosisName into d
+                          select new DiagnosisGrouping { DiagnosisName = d.Key, Percent = Math.Round((double) 100 * d.Count() / db.DiagnosisMap.Count(), 2) };
+            
+            var model = new ViewPatientDiagnosisBreakdownViewModel
+            {
+                Rows = results.ToList()
+            };
+            return View(model);
+        }
     }
 }

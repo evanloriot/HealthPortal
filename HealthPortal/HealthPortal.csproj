@@ -409,6 +409,7 @@
     <Content Include="Views\Forum\AddPost.cshtml" />
     <Content Include="Views\Physician\Index.cshtml" />
     <Content Include="Views\Physician\ViewPatient.cshtml" />
+    <Content Include="Views\Physician\ViewPatientDiagnosisBreakdown.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

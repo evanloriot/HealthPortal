@@ -1,0 +1,22 @@
+﻿@model HealthPortal.Models.ViewPatientDiagnosisBreakdownViewModel
+
+@{ 
+    ViewBag.Title = "Diagnoses Breakdown.";
+}
+
+<h2>@ViewBag.Title</h2>
+<h4>Percentages:</h4>
+<hr />
+<table border="1px solid black">
+    <tr>
+        <th>Diagnosis Name</th>
+        <th>Percentage</th>
+    </tr>
+    @foreach(var item in Model.Rows)
+    {
+        <tr>
+            <td>@item.DiagnosisName</td>
+            <td>@item.Percent</td>
+        </tr>
+    }
+</table>

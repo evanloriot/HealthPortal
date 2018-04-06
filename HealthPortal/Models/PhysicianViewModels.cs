@@ -18,4 +18,15 @@ namespace HealthPortal.Models
         public virtual IList<Prescriptions> Prescriptions { get; set; }
         public virtual IList<MedicalHistory> MedicalHistory { get; set; }
     }
+
+    public class DiagnosisGrouping
+    {
+        public string DiagnosisName { get; set; }
+        public double Percent { get; set; }
+    }
+
+    public class ViewPatientDiagnosisBreakdownViewModel
+    {
+        public IList<DiagnosisGrouping> Rows { get; set; }
+    }
 }
