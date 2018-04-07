@@ -58,15 +58,16 @@
         $(function () {
             $('#dateselector').datetimepicker({
                 inline: true,
-                format: "MM/DD/YYYY"
+                format: "MM/DD/YYYY",
+                defaultDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
             });
         });
 
         var object = @(Html.Raw(Json.Encode(Model.TimeDates)));
 
         $('#dateselector').on('dp.change', function (e) {
-            if (getFormattedDateYearFirst(e.date._d) < getFormattedDateYearFirst(new Date())) {
-                alert("Please choose a date either today or in the future.");
+            if (getFormattedDateYearFirst(e.date._d) <= getFormattedDateYearFirst(new Date())) {
+                alert("Please choose a date in the future.");
                 e.preventDefault();
             }
             $("#date").html(e.date._d.toDateString());
@@ -82,8 +83,8 @@
         });
 
         function check(event) {
-            if (reverseDate($('#dateselector').data().date) < getFormattedDateYearFirst(new Date())) {
-                alert("Please choose a date either today or in the future.");
+            if (reverseDate($('#dateselector').data().date) <= getFormattedDateYearFirst(new Date())) {
+                alert("Please choose a date in the future.");
                 event.preventDefault();
             }
             var names = $('[name="reas"]');
