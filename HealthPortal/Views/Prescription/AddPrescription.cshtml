@@ -23,6 +23,10 @@
         @Html.Label("Prescription Type", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.PrescriptionTypeID, new SelectList(@Model.Types, "PrescriptionTypeID", "Type"))
+            @Html.ActionLink("Add Type", "AddPrescriptionType")
+            [
+            @Html.ActionLink("Manage Types", "ManagePrescriptionTypes")
+            ]
         </div>
     </div>
     <div class="form-group">

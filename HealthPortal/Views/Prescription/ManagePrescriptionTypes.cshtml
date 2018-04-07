@@ -1,0 +1,22 @@
+﻿@model HealthPortal.Models.ManagePrescriptionTypesViewModel
+
+@{ 
+    ViewBag.Title = "Manage Prescription Types.";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<h4>Types:</h4>
+<hr />
+<ul>
+    @foreach (var item in Model.Types)
+    {
+        <li>
+            @item.Type
+            [
+            @Html.ActionLink("Delete", "DeletePrescriptionType", new { ID = item.PrescriptionTypeID })
+            ]
+        </li>
+    }
+</ul>
+@Html.ActionLink("Back", "AddPrescription")

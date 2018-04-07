@@ -169,6 +169,63 @@ namespace HealthPortal.Controllers
             return RedirectToAction("ViewPatient", new { userID, message = PrescriptionMessageId.DeletePrescriptionSuccess });
         }
 
+        public ActionResult AddPrescriptionType()
+        {
+            var model = new AddPrescriptionTypeViewModel();
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddPrescriptionType(AddPrescriptionTypeViewModel model)
+        {
+            if(!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var db = new ApplicationDbContext();
+            var type = new PrescriptionType
+            {
+                Type = model.Type
+            };
+            db.PrescriptionTypes.Add(type);
+            db.SaveChanges();
+            return RedirectToAction("AddPrescription");
+        }
+
+        public ActionResult ManagePrescriptionTypes(PrescriptionMessageId? message)
+        {
+            ViewBag.StatusMessage = message == PrescriptionMessageId.DeletePrescriptionTypeSuccess ? "Prescription type successfully deleted."
+                : message == PrescriptionMessageId.DeletePrescriptionTypeFailure ? "Prescription type cannot be deleted because prescriptions exist with this type."
+                : "";
+            var db = new ApplicationDbContext();
+            var model = new ManagePrescriptionTypesViewModel
+            {
+                Types = db.PrescriptionTypes.ToList()
+            };
+            return View(model);
+        }
+
+        public ActionResult DeletePrescriptionType(int? ID)
+        {
+            if(ID == null)
+            {
+                return View("Error");
+            }
+            var db = new ApplicationDbContext();
+            var type = db.PrescriptionTypes.Where(u => u.PrescriptionTypeID == ID).FirstOrDefault();
+            db.PrescriptionTypes.Remove(type);
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("ManagePrescriptionTypes", new { message = PrescriptionMessageId.DeletePrescriptionTypeFailure });
+            }
+            return RedirectToAction("ManagePrescriptionTypes", new { message = PrescriptionMessageId.DeletePrescriptionTypeSuccess });
+        }
+
         public ActionResult AddPrescription()
         {
             var db = new ApplicationDbContext();
@@ -257,6 +314,8 @@ namespace HealthPortal.Controllers
         public enum PrescriptionMessageId
         {
             DeletePrescriptionSuccess,
+            DeletePrescriptionTypeSuccess,
+            DeletePrescriptionTypeFailure,
             DeletePrescriptionFailure,
             DeletePrescriptionFromPatientSuccess
         }

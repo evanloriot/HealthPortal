@@ -420,6 +420,8 @@
     <Content Include="Views\Prescription\ViewPrescriptions.cshtml" />
     <Content Include="Views\Prescription\AddPrescription.cshtml" />
     <Content Include="Views\Prescription\AddPrescriptionToPatient.cshtml" />
+    <Content Include="Views\Prescription\AddPrescriptionType.cshtml" />
+    <Content Include="Views\Prescription\ManagePrescriptionTypes.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

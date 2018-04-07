@@ -31,6 +31,18 @@ namespace HealthPortal.Models
         public int PrescriptionTypeID { get; set; }
     }
 
+    public class AddPrescriptionTypeViewModel
+    {
+        [Required]
+        [Display(Name = "Prescription Type")]
+        public string Type { get; set; }
+    }
+
+    public class ManagePrescriptionTypesViewModel
+    {
+        public virtual IList<PrescriptionType> Types { get; set; }
+    }
+
     public class AddPrescriptionToPatientViewModel
     {
         public virtual IList<Prescriptions> Prescriptions { get; set; }
