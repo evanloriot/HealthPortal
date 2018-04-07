@@ -56,6 +56,10 @@ else
             </tr>
         }
     </table>
+    if(Model.Diagnoses.Count == 0)
+    {
+        <p>You have not been diagnosed with any diseases/conditions. Keep up the healthy lifestyle!</p>
+    }
 }
 
 @section Scripts {
