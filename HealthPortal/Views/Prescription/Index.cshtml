@@ -45,7 +45,7 @@ else
     <table>
         <tr>
             <th>
-                Diagnosis
+                Prescriptions
             </th>
         </tr>
         @foreach (var item in Model.Prescriptions)
@@ -59,7 +59,7 @@ else
     </table>
     if (Model.Prescriptions.Count == 0)
     {
-        <p>You have not been diagnosed with any diseases/conditions. Keep up the healthy lifestyle!</p>
+        <p>You are not currently prescribed any medications.</p>
     }
 }
 

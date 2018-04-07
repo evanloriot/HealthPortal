@@ -171,7 +171,11 @@ namespace HealthPortal.Controllers
 
         public ActionResult AddPrescription()
         {
-            var model = new AddPrescriptionViewModel();
+            var db = new ApplicationDbContext();
+            var model = new AddPrescriptionViewModel
+            {
+                Types = db.PrescriptionTypes.ToList()
+            };
 
             return View(model);
         }
@@ -179,16 +183,17 @@ namespace HealthPortal.Controllers
         [HttpPost]
         public ActionResult AddPrescription(AddPrescriptionViewModel model)
         {
+            var db = new ApplicationDbContext();
             if (!ModelState.IsValid)
             {
+                model.Types = db.PrescriptionTypes.ToList();
                 return View(model);
             }
 
-            var db = new ApplicationDbContext();
-
             var p = new Prescriptions
             {
-                PrescriptionName = model.PrescriptionName
+                PrescriptionName = model.PrescriptionName,
+                PrescriptionTypeID = model.PrescriptionTypeID
             };
 
             db.Prescriptions.Add(p);

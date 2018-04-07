@@ -7,18 +7,6 @@
 <h2>@ViewBag.Title</h2>
 <p class="text-success">@ViewBag.StatusMessage</p>
 
-
-@*@if (User.IsInRole("Doctor"))
-    {
-        <h3>What diagnosis would you like to add?</h3>
-        <select>
-            @foreach (var item in @Model.Diagnoses)
-            {
-                <option value="@item.DiagnosisID">@item.DiagnosisName</option>
-            }
-        </select>
-    }*@
-
 @using (Html.BeginForm("AddPrescriptionToPatient", "Prescription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 {
     @Html.AntiForgeryToken()
@@ -30,7 +18,7 @@
     @Html.ValidationSummary("", new { @class = "text-danger" })
 
     <div class="form-group">
-        @Html.LabelFor(m => m.PrescriptionID, new { @class = "col-md-2 control-label" })
+        @Html.Label("Prescription", new { @class = "col-md-2 control-label" })
         <div class="col-md-10">
             @Html.DropDownListFor(m => m.PrescriptionID, new SelectList(@Model.Prescriptions, "PrescriptionID", "PrescriptionName"))
         </div>
