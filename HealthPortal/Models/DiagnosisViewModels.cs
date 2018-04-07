@@ -23,6 +23,7 @@ namespace HealthPortal.Models
     public class AddDiagnosisViewModel
     {
         [Required]
+        [Display(Name = "Diagnosis Name")]
         public string DiagnosisName { get; set; }
     }
 

@@ -50,7 +50,7 @@ namespace HealthPortal.Controllers
         }
 
         // GET: Diagnosis
-        public ActionResult Index()
+        public ActionResult Index(DiagnosisMessageId? message)
         {
             if(User.IsInRole("Patient"))
             {
@@ -73,6 +73,8 @@ namespace HealthPortal.Controllers
             }
             else if(User.IsInRole("Doctor"))
             {
+                ViewBag.StatusMessage = message == DiagnosisMessageId.AddDiagnosisSuccess ? "Diagnosis successfully added to listings."
+                    : "";
                 var docID = User.Identity.GetUserId();
                 var db = new ApplicationDbContext();
                 var docpatients = db.Users.Where(u => u.PrimaryPhysician.Id == docID).ToList();
@@ -193,7 +195,7 @@ namespace HealthPortal.Controllers
             db.Diagnoses.Add(diagnosis);
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = DiagnosisMessageId.AddDiagnosisSuccess });
         }
 
         public ActionResult AddDiagnosisToPatient(string patientID)
@@ -250,6 +252,7 @@ namespace HealthPortal.Controllers
 
         public enum DiagnosisMessageId
         {
+            AddDiagnosisSuccess,
             DeleteDiagnosisSuccess,
             DeleteDiagnosisFailure,
             DeleteDiagnosisFromPatientSuccess

@@ -50,7 +50,7 @@ namespace HealthPortal.Controllers
         }
 
         // GET: Prescription
-        public ActionResult Index()
+        public ActionResult Index(PrescriptionMessageId? message)
         {
             if (User.IsInRole("Patient"))
             {
@@ -74,6 +74,8 @@ namespace HealthPortal.Controllers
             }
             else if (User.IsInRole("Doctor"))
             {
+                ViewBag.StatusMessage = message == PrescriptionMessageId.AddPrescriptionSuccess ? "Prescription successfully added to listings."
+                    : "";
                 var docID = User.Identity.GetUserId();
                 var db = new ApplicationDbContext();
                 var docpatients = db.Users.Where(u => u.PrimaryPhysician.Id == docID).ToList();
@@ -256,7 +258,7 @@ namespace HealthPortal.Controllers
             db.Prescriptions.Add(p);
             db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new { message = PrescriptionMessageId.AddPrescriptionSuccess });
         }
 
         public ActionResult AddPrescriptionToPatient(string patientID)
@@ -313,6 +315,7 @@ namespace HealthPortal.Controllers
 
         public enum PrescriptionMessageId
         {
+            AddPrescriptionSuccess,
             DeletePrescriptionSuccess,
             DeletePrescriptionTypeSuccess,
             DeletePrescriptionTypeFailure,
