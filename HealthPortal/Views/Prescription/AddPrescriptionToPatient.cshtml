@@ -1,0 +1,53 @@
+﻿@model HealthPortal.Models.AddPrescriptionToPatientViewModel
+
+@{
+    ViewBag.Title = "Prescription Page";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+
+@*@if (User.IsInRole("Doctor"))
+    {
+        <h3>What diagnosis would you like to add?</h3>
+        <select>
+            @foreach (var item in @Model.Diagnoses)
+            {
+                <option value="@item.DiagnosisID">@item.DiagnosisName</option>
+            }
+        </select>
+    }*@
+
+@using (Html.BeginForm("AddPrescriptionToPatient", "Prescription", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>Which prescription would you like to add to @Model.PatientName?</h4>
+    <hr />
+
+    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+
+    @Html.ValidationSummary("", new { @class = "text-danger" })
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.PrescriptionID, new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.PrescriptionID, new SelectList(@Model.Prescriptions, "PrescriptionID", "PrescriptionName"))
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-default" value="Submit" />
+        </div>
+    </div>
+}
+
+<br />
+<br />
+
+@Html.ActionLink("Back", "ViewPatient", new { userID = Model.PatientID })
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,46 @@
+﻿@model HealthPortal.Models.ViewPatientPrescriptionViewModel
+
+@{
+    ViewBag.Title = "View Patient Page";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+
+<h4>List of @Model.PatientName's Prescription History:</h4>
+<hr />
+<table>
+    <tr>
+        <th>
+            Prescription
+        </th>
+    </tr>
+    @foreach (var item in Model.Prescriptions)
+    {
+        <tr>
+            <td>
+                @item.PrescriptionName
+                [
+                @Html.ActionLink("Delete", "DeletePrescriptionFromPatient", new { userID = Model.PatientID, ID = item.PrescriptionID })
+                ]
+            </td>
+        </tr>
+    }
+</table>
+@if (Model.Prescriptions.Count == 0)
+{
+    <p>Patient currently had no prescriptions!</p>
+}
+
+<br />
+
+<p>@Html.ActionLink("Add a prescription to this patient", "AddPrescriptionToPatient", new { patientID = Model.PatientID })</p>
+
+<br />
+<br />
+
+@Html.ActionLink("Back", "Index")
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

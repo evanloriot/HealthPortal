@@ -225,6 +225,7 @@
     <Compile Include="Models\Post.cs" />
     <Compile Include="Models\Prescriptions.cs" />
     <Compile Include="Models\PrescriptionsMap.cs" />
+    <Compile Include="Models\PrescriptionsViewModel.cs" />
     <Compile Include="Models\PrescriptionType.cs" />
     <Compile Include="Models\ResponseViewModels.cs" />
     <Compile Include="Models\Thread.cs" />
@@ -415,6 +416,10 @@
     <Content Include="Views\Physician\ViewPatient.cshtml" />
     <Content Include="Views\Physician\ViewPatientDiagnosisBreakdown.cshtml" />
     <Content Include="Views\Diagnosis\ViewDiagnoses.cshtml" />
+    <Content Include="Views\Prescription\ViewPatient.cshtml" />
+    <Content Include="Views\Prescription\ViewPrescriptions.cshtml" />
+    <Content Include="Views\Prescription\AddPrescription.cshtml" />
+    <Content Include="Views\Prescription\AddPrescriptionToPatient.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

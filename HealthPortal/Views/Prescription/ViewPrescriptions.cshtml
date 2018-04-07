@@ -1,0 +1,21 @@
+﻿@model HealthPortal.Models.ViewPrescriptionsViewModel
+
+@{
+    ViewBag.Title = "View Prescriptions.";
+}
+
+<h2>@ViewBag.Title</h2>
+<p class="text-success">@ViewBag.StatusMessage</p>
+<h4>Prescriptions:</h4>
+<ul>
+    @foreach (var item in Model.Prescriptions)
+    {
+        <li>
+            @item.PrescriptionName
+            [
+            @Html.ActionLink("Delete Prescription", "DeletePrescription", new { ID = item.PrescriptionID })
+            ]
+        </li>
+    }
+</ul>
+@Html.ActionLink("Back", "Index")
