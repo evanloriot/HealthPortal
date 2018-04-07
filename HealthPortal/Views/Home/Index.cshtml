@@ -10,12 +10,15 @@
         they can ask questions and licensed doctors would have a place to quickly address any issues. Additionally, it provides doctors
         and nurses an easy system to manage their patients and patient details such as prescriptions, diagnosis, etc.
     </p>
-    @Html.ActionLink("Manage Profile", "Index", "Manage")<br />
-    @Html.ActionLink("Schedule/View Appointments", "Index", "Appointment")<br />
-    @Html.ActionLink("View Medical History", "Index", "MedicalHistory")<br />
-    @Html.ActionLink("View Diagnoses", "Index", "Diagnosis")<br />
-    @Html.ActionLink("View Prescriptions", "Index", "Prescription")<br />
-    @Html.ActionLink("View Forum", "Index", "Forum")<br />
+    @if (User.Identity.IsAuthenticated)
+    {
+        @Html.ActionLink("Manage Profile", "Index", "Manage")<br />
+        @Html.ActionLink("Schedule/View Appointments", "Index", "Appointment")<br />
+        @Html.ActionLink("View Medical History", "Index", "MedicalHistory")<br />
+        @Html.ActionLink("View Diagnoses", "Index", "Diagnosis")<br />
+        @Html.ActionLink("View Prescriptions", "Index", "Prescription")<br />
+        @Html.ActionLink("View Forum", "Index", "Forum")<br />
+    }
 </div>
 @if (User.IsInRole("Doctor"))
 {
