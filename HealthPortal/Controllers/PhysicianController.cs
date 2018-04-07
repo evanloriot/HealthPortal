@@ -4,6 +4,7 @@ using Microsoft.AspNet.Identity.Owin;
 using PagedList;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -101,18 +102,42 @@ namespace HealthPortal.Controllers
             return View(model);
         }
 
-        public ActionResult ViewPatientDiagnosisBreakdown()
+        public ActionResult ViewPatientDiagnosisBreakdown(string PhysicianGroupID, string PhysicianSelectID)
         {
             var db = new ApplicationDbContext();
-            var results = from diagnosisMap in db.DiagnosisMap
-                          join diagnosis in db.Diagnoses on diagnosisMap.DiagnosisID equals diagnosis.DiagnosisID
-                          group diagnosis by diagnosis.DiagnosisName into d
-                          select new DiagnosisGrouping { DiagnosisName = d.Key, Percent = Math.Round((double) 100 * d.Count() / db.DiagnosisMap.Count(), 2) };
+            var role = (from r in db.Roles where r.Name == "Doctor" select r.Id).SingleOrDefault();
+            var physicians = db.Identifiers.Where(u => u.User.Roles.Any(r => r.RoleId == role)).ToList();
+            IQueryable<DiagnosisGrouping> results;
+            if(PhysicianGroupID == null)
+            {
+                results = from diagnosisMap in db.DiagnosisMap
+                              join diagnosis in db.Diagnoses on diagnosisMap.DiagnosisID equals diagnosis.DiagnosisID
+                              join user in db.Users on diagnosisMap.UserID equals user.Id
+                              group diagnosis by diagnosis.DiagnosisName into d
+                              select new DiagnosisGrouping { DiagnosisName = d.Key, Percent = Math.Round((double)100 * d.Count() / db.Users.Count(), 2) };
+            }
+            else
+            {
+                var physID = physicians.Where(u => u.IdentifierID == PhysicianGroupID).FirstOrDefault().IdentifierID;
+
+                var divisor = db.Users.Where(u => u.PhysicianID == physID).Count();
+
+                results = from diagnosisMap in db.DiagnosisMap
+                              join diagnosis in db.Diagnoses on diagnosisMap.DiagnosisID equals diagnosis.DiagnosisID
+                              join user in db.Users on diagnosisMap.UserID equals user.Id
+                              where user.PhysicianID == physID
+                              group diagnosis by diagnosis.DiagnosisName into d
+                              select new DiagnosisGrouping { DiagnosisName = d.Key, Percent = Math.Round((double)100 * d.Count() / divisor, 2) };
+            }
+            
 
             DateTime begin = db.Appointments.OrderBy(u => u.TimeDate).FirstOrDefault().TimeDate;
             DateTime middle = begin.AddDays((DateTime.Today - begin).Days);
 
-            var result = db.Database.SqlQuery<decimal?>(
+            DbRawSqlQuery<decimal?> result;
+            if(PhysicianSelectID == null)
+            {
+                result = db.Database.SqlQuery<decimal?>(
                 @"declare @firstDate Date;
                 set @firstDate=(select top 1 TimeDate from Appointments order by TimeDate);
                 declare @endDate Date;
@@ -141,11 +166,52 @@ namespace HealthPortal.Controllers
 	                where Appointments.TimeDate > @medDate
 	                group by Appointments.PatientID
                 ) p2 on p1.PatientID = p2.PatientID");
-            
+            }
+            else
+            {
+                result = db.Database.SqlQuery<decimal?>(
+                    @"declare @physician nvarchar(128);
+                    set @physician='" + PhysicianSelectID + @"';
+
+                    declare @firstDate Date;
+                    set @firstDate=(select top 1 TimeDate from Appointments order by TimeDate);
+                    declare @endDate Date;
+                    set @endDate=(select top 1 TimeDate from Appointments order by TimeDate desc);
+                    declare @medDate Date;
+                    set @medDate=DATEADD(DAY, DATEDIFF(DAY, @firstDate, @endDate) / 2, @firstDate);
+
+                    select 
+	                    ROUND(AVG((CAST(p2.part as decimal) / p2.total * 100) - (CAST(p1.part as decimal) / p1.total * 100)) * 100, 2)
+                    from(
+	                    select 
+		                    Appointments.PatientID,
+		                    sum(CAST(CheckUpResponse.Q7A as int)) as part,
+		                    9*count(CheckUpResponse.Q7A) as total
+	                    from CheckUpResponse
+	                    inner join Appointments on CheckUpResponse.AppointmentID = Appointments.AppointmentID
+	                    inner join AspNetUsers on Appointments.PatientID = AspNetUsers.Id
+	                    where Appointments.TimeDate <= @medDate and AspNetUsers.PhysicianID = @physician
+	                    group by Appointments.PatientID
+                    ) p1 inner join (
+	                    select 
+		                    Appointments.PatientID,
+		                    sum(CAST(CheckUpResponse.Q7A as int)) as part,
+		                    9*count(CheckUpResponse.Q7A) as total
+	                    from CheckUpResponse
+	                    inner join Appointments on CheckUpResponse.AppointmentID = Appointments.AppointmentID
+	                    inner join AspNetUsers on Appointments.PatientID = AspNetUsers.Id
+	                    where Appointments.TimeDate > @medDate and AspNetUsers.PhysicianID = @physician
+	                    group by Appointments.PatientID
+                    ) p2 on p1.PatientID = p2.PatientID");
+            }
+
             var model = new ViewPatientDiagnosisBreakdownViewModel
             {
+                Physicians = physicians,
                 Rows = results.ToList(),
-                Shift = result.FirstOrDefault()
+                Shift = result.FirstOrDefault(),
+                Selected = PhysicianSelectID,
+                Group = PhysicianGroupID
             };
             return View(model);
         }

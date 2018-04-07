@@ -27,6 +27,9 @@ namespace HealthPortal.Models
 
     public class ViewPatientDiagnosisBreakdownViewModel
     {
+        public virtual IList<Identifiers> Physicians { get; set; }
+        public string Group { get; set; }
+        public string Selected { get; set; }
         public IList<DiagnosisGrouping> Rows { get; set; }
         public decimal? Shift { get; set; }
     }

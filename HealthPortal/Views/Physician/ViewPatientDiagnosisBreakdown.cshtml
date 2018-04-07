@@ -1,20 +1,25 @@
 ﻿@model HealthPortal.Models.ViewPatientDiagnosisBreakdownViewModel
 
-@{ 
+@{
     ViewBag.Title = "Diagnoses Breakdown.";
 }
 
 <h2>@ViewBag.Title</h2>
 <h4>Percentages:</h4>
 <hr />
-<p>Below is a breakdown of the diagnoses of patients with a diagnosis. Patients without diagnoses are not included in statistics. Below is the break down of diagnoses 
-    into groups and their associated percentage of the patient base.</p>
+<p>
+    Below is a breakdown of the diagnoses of patients with a diagnosis. Patients without diagnoses are not included in statistics. Below is the break down of diagnoses
+    into groups and their associated percentage of the patient base. You can filter the set by Physician. Filtering limits patients to that physician only, effectively giving the
+    breakdown of diagnoses by that physician across their patients.
+</p>
+@Html.DropDownList("PhysiciansGroup", new SelectList(@Model.Physicians, "IdentifierID", "FullName"), "All")
+<button onclick="change()">Change Physician</button><br /><br />
 <table border="1px solid black">
     <tr>
         <th>Diagnosis Name</th>
         <th>Percentage</th>
     </tr>
-    @foreach(var item in Model.Rows)
+    @foreach (var item in Model.Rows)
     {
         <tr>
             <td>@item.DiagnosisName</td>
@@ -22,10 +27,43 @@
         </tr>
     }
 </table><br /><br />
-<p>In the following section, we will look at patients' response to their level of energy over time. Before an appointment, they are asked to 
+<p>
+    In the following section, we will look at patients' response to their level of energy over time. Before an appointment, they are asked to
     submit a pre-checkup questionnaire. One of the questions asks for the patient to rate their level of energy from 1 to 9 with 1 being lowest
-    and 9 being highest amount of energy. The following percentage is the average shift in level of energy over time across all patients.</p>
+    and 9 being highest amount of energy. The following percentage is the average shift in level of energy over time across all patients. You can
+    filter by physician which gives that physician's patients' net energy shift. 
+</p>
+@Html.DropDownList("PhysiciansSelect", new SelectList(@Model.Physicians, "IdentifierID", "FullName"), "All")
+<button onclick="change()">Change Physician</button><br /><br />
 <br />
 <div>
     <b>Net Energy Shift: </b>@Model.Shift
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            document.getElementById("PhysiciansGroup").value = "@Model.Group";
+            document.getElementById("PhysiciansSelect").value = "@Model.Selected";
+        });
+
+        function change() {
+            var url = "/Physician/ViewPatientDiagnosisBreakdown/"
+            if (document.getElementById("PhysiciansGroup").value != "") {
+                url += "?PhysicianGroupID=" + document.getElementById("PhysiciansGroup").value;
+            }
+            if (document.getElementById("PhysiciansSelect").value != "") {
+                if (url == "/Physician/ViewPatientDiagnosisBreakdown/") {
+                    url += "?";
+                }
+                else {
+                    url += "&"
+                }
+                url += "PhysicianSelectID=" + document.getElementById("PhysiciansSelect").value;
+            }
+            window.location.href = url;
+        }
+    </script>
+}
