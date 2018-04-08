@@ -19,7 +19,7 @@
         </ul>
         <hr />
         Page @(Model.Groups.PageCount < Model.Groups.PageNumber ? 0 : Model.Groups.PageNumber) of @Model.Groups.PageCount
-        @Html.PagedListPager(Model.Groups, Page => Url.Action("ManageGroups", new { Page }))
+        @Html.PagedListPager(Model.Groups, Page => Url.Action("Index", new { Page }))
     </div>
 }
 else
